@@ -13,5 +13,9 @@
         <include>
             <directory suffix=".php">./src</directory>
         </include>
+        <exclude>
+            <directory suffix=".php">./src/*/copy</directory>
+            <file>./src/Install.php</file>
+        </exclude>
     </source>
 </phpunit>

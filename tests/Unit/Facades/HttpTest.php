@@ -6,11 +6,12 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
-use Tests\Fixtures\Constants;
 use WebmanTech\LaravelHttpClient\Facades\Http;
 
+pest()->group('http');
+
 beforeEach(function () {
-    $this->httpBinHost = Constants::HTTP_BIN_HOST;
+    $this->httpBinHost = config('plugin.webman-tech.laravel-http-client.app.httpbin_host');
 });
 
 test('instance', function () {

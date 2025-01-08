@@ -1,7 +1,6 @@
 <?php
 
 use Psr\Http\Message\RequestInterface;
-use Tests\Fixtures\Constants;
 use WebmanTech\LaravelHttpClient\Facades\Http;
 use WebmanTech\LaravelHttpClient\Guzzle\Log\Formatter\JsonMessageFormatter;
 use WebmanTech\LaravelHttpClient\Guzzle\Log\Formatter\PsrMessageFormatter;
@@ -74,8 +73,9 @@ return [
     'macros' => [
         // 测试用
         'httpbin' => function () {
-            return Http::baseUrl(Constants::HTTP_BIN_HOST)
+            return Http::baseUrl(config('plugin.webman-tech.laravel-http-client.app.httpbin_host'))
                 ->asJson();
         }
     ],
+    'httpbin_host' => get_env('HTTPBIN_HOST', 'https://httpbingo.org'),
 ];

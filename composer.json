@@ -87,7 +87,9 @@
     "sort-packages": true
   },
   "scripts": {
-    "test": "pest",
+    "test": "pest --exclude-group=http",
+    "test-http": "pest --group=http",
+    "test-all": "pest",
     "test-coverage": "pest --coverage"
   }
 }

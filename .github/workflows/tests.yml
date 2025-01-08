@@ -12,6 +12,12 @@ jobs:
     strategy:
       matrix:
         php: [8.2, 8.3, 8.4]
+    services:
+      go-httpbin:
+        image: mccutchen/go-httpbin
+        ports:
+          - 8080:8080
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -38,4 +44,6 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: Run test
-        run: composer test
+        run: composer test-all
+        env:
+          HTTPBIN_HOST: "http://localhost:8080"
