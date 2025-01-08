@@ -48,9 +48,9 @@ class Translator
     {
         // registerLoader
         $loader = static::createLoader();
-        $locale = config('translation.locale', 'zh_CN');
+        $locale = ConfigHelper::getGlobal('translation.locale', 'zh_CN');
         $translator = new LaravelTranslator($loader, $locale);
-        if ($fallback = config('translation.fallback_locale', [])) {
+        if ($fallback = ConfigHelper::getGlobal('translation.fallback_locale', [])) {
             if (is_array($fallback)) {
                 foreach ($fallback as $value) {
                     if ($value !== $locale) {
@@ -68,7 +68,7 @@ class Translator
 
     protected static function createLoader(): LoaderContract
     {
-        return new FileLoader(new Filesystem(), config('translation.path'));
+        return new FileLoader(new Filesystem(), ConfigHelper::getGlobal('translation.path'));
     }
 
     /**

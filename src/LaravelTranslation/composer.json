@@ -7,6 +7,9 @@
     "php": "^8.2",
     "illuminate/translation": "^11.0"
   },
+  "_comment": [
+    "symfony/translation for autodetct locale"
+  ],
   "autoload": {
     "psr-4": {
       "WebmanTech\\LaravelTranslation\\": ""

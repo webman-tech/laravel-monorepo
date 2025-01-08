@@ -1,4 +1,7 @@
 <?php
+/**
+ * 扫描 src 目录生成 gitsplit.yml
+ */
 
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;

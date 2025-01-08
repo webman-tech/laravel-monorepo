@@ -1,44 +1,44 @@
 {
   "name": "webman-tech/laravel-monorepo",
   "description": "laravel component for webman monorepo",
-  "type": "library",
   "license": "MIT",
+  "type": "library",
   "authors": [
     {
       "name": "kriss",
       "email": "462679766@qq.com"
     }
   ],
-  "autoload": {
-    "psr-4": {
-      "WebmanTech\\": "src/"
-    },
-    "files": [
-      "src/helper.php"
-    ]
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Tests\\": "tests",
-      "app\\": "app",
-      "plugin\\": "plugin",
-      "": "tests/webman"
-    }
-  },
+  "_comment": [
+    "symfony/cache for psr16",
+    "symfony/mime for File::guessExtension",
+    "league/flysystem for Storage LocalDriver",
+    "symfony/http-foundation for FilesystAdapter::response",
+    "illuminate/http for FilesystAdapter::putFile",
+    "overtrue/flysystem-cos for Storage cos driver",
+    "alphasnow/aliyun-oss-laravel for Storage oss driver",
+    "overtrue/flysystem-qiniu for Storage qiniu driver",
+    "symfony/translation for autodetct locale",
+    "illuminate/database for unique rule"
+  ],
   "require": {
     "php": "^8.2",
+    "guzzlehttp/guzzle": "^7.8",
     "illuminate/cache": "^11.0",
     "illuminate/config": "^11.0",
     "illuminate/console": "^11.0",
     "illuminate/container": "^11.0",
     "illuminate/events": "^11.0",
+    "illuminate/filesystem": "^11.0",
+    "illuminate/http": "^11.0",
     "illuminate/translation": "^11.0",
-    "illuminate/validation": "^11.0"
+    "illuminate/validation": "^11.0",
+    "league/flysystem": "^3.0"
   },
   "require-dev": {
     "alphasnow/aliyun-oss-laravel": "^4.9",
+    "ergebnis/composer-normalize": "^2.45",
     "illuminate/database": "^11.0",
-    "illuminate/http": "^11.0",
     "monolog/monolog": "^3.8",
     "overtrue/flysystem-cos": "^5.1",
     "overtrue/flysystem-qiniu": "^3.2",
@@ -52,13 +52,42 @@
     "webman/console": "^1.3",
     "workerman/webman-framework": "^1.6"
   },
-  "config": {
-    "sort-packages": true,
-    "allow-plugins": {
-      "pestphp/pest-plugin": true
+  "replace": {
+    "webman-tech/laravel-cache": "self.version",
+    "webman-tech/laravel-console": "self.version",
+    "webman-tech/laravel-filesystem": "self.version",
+    "webman-tech/laravel-http-client": "self.version",
+    "webman-tech/laravel-translation": "self.version",
+    "webman-tech/laravel-validation": "self.version"
+  },
+  "autoload": {
+    "psr-4": {
+      "WebmanTech\\": "src/"
+    },
+    "files": [
+      "src/LaravelCache/helper.php",
+      "src/LaravelFilesystem/helper.php",
+      "src/LaravelTranslation/helper.php",
+      "src/LaravelValidation/helper.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "": "tests/webman",
+      "Tests\\": "tests",
+      "app\\": "app",
+      "plugin\\": "plugin"
     }
   },
+  "config": {
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true,
+      "pestphp/pest-plugin": true
+    },
+    "sort-packages": true
+  },
   "scripts": {
-    "test": "pest"
+    "test": "pest",
+    "test-coverage": "pest --coverage"
   }
 }
