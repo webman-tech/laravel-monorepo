@@ -10,3 +10,6 @@ composer.lock
 /resource/translations
 /storage
 /runtime
+/artisan
+/app
+/plugin

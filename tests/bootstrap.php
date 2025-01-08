@@ -1,12 +1,6 @@
 <?php
 
-if (base_path('/config/app.php')) {
-    copy_dir(__DIR__. '/config', base_path('/config'));
-}
-
-if (!is_dir(base_path('resource/translations'))) {
-    copy_dir(__DIR__. '/resource', base_path('/resource'));
-}
+copy_dir(__DIR__ . '/webman', base_path());
 
 if (!file_exists(storage_path('app'))) {
     \WebmanTech\LaravelFilesystem\Install::install();
