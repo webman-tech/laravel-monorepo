@@ -1,0 +1,21 @@
+{
+  "name": "webman-tech/laravel-translation",
+  "type": "library",
+  "license": "MIT",
+  "description": "Webman plugin webman-tech/laravel-translation",
+  "require": {
+    "php": "^8.2",
+    "illuminate/translation": "^11.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "WebmanTech\\LaravelTranslation\\": ""
+    },
+    "files": [
+      "helper.php"
+    ]
+  },
+  "config": {
+    "sort-packages": true
+  }
+}

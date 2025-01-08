@@ -3,19 +3,39 @@
   "description": "laravel component for webman monorepo",
   "type": "library",
   "license": "MIT",
-  "autoload": {
-    "psr-4": {
-      "WebmanTech\\LaravelMonorepo\\": "src/"
-    }
-  },
   "authors": [
     {
       "name": "kriss",
       "email": "462679766@qq.com"
     }
   ],
-  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "WebmanTech\\": "src/"
+    },
+    "files": [
+      "src/helper.php"
+    ]
+  },
   "require": {
-      "php": "^8.2"
+    "php": "^8.2",
+    "illuminate/translation": "^11.0",
+    "illuminate/validation": "^11.0"
+  },
+  "require-dev": {
+    "illuminate/database": "^11.0",
+    "pestphp/pest": "^3.7",
+    "symfony/translation": "^7.2",
+    "symfony/var-exporter": "^7.2",
+    "workerman/webman-framework": "^1.6"
+  },
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  },
+  "scripts": {
+    "test": "pest"
   }
 }
