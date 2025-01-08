@@ -1,0 +1,19 @@
+name: gitsplit
+on:
+  release:
+    types: [published]
+
+jobs:
+  gitsplit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Fetch all history
+          ref: "11.x" # Force checkout the branch to split its commits as well
+      - name: split
+        uses: docker://jderusse/gitsplit:latest
+        with:
+          args: gitsplit
+        env:
+          GH_TOKEN: ${{ secrets.GITSPLIT_TOKEN }}
