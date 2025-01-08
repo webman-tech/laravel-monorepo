@@ -17,6 +17,11 @@
       "src/helper.php"
     ]
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests"
+    }
+  },
   "require": {
     "php": "^8.2",
     "illuminate/cache": "^11.0",
@@ -29,6 +34,7 @@
     "alphasnow/aliyun-oss-laravel": "^4.9",
     "illuminate/database": "^11.0",
     "illuminate/http": "^11.0",
+    "monolog/monolog": "^3.8",
     "overtrue/flysystem-cos": "^5.1",
     "overtrue/flysystem-qiniu": "^3.2",
     "pestphp/pest": "^3.7",
