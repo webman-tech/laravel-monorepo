@@ -1,0 +1,9 @@
+# https://github.com/jderusse/docker-gitsplit
+cache_url: "cache/gitsplit"
+splits:
+  - prefix: "src/LaravelTranslation"
+    target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-translation.git"
+  - prefix: "src/LaravelValidation"
+    target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-validation.git"
+origins:
+  - ^\d+.x$
