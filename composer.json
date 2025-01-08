@@ -23,8 +23,14 @@
     "illuminate/validation": "^11.0"
   },
   "require-dev": {
+    "alphasnow/aliyun-oss-laravel": "^4.9",
     "illuminate/database": "^11.0",
+    "illuminate/http": "^11.0",
+    "overtrue/flysystem-cos": "^5.1",
+    "overtrue/flysystem-qiniu": "^3.2",
     "pestphp/pest": "^3.7",
+    "symfony/http-foundation": "^7.2",
+    "symfony/mime": "^7.2",
     "symfony/translation": "^7.2",
     "symfony/var-exporter": "^7.2",
     "workerman/webman-framework": "^1.6"
