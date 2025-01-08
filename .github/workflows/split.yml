@@ -1,5 +1,8 @@
 name: gitsplit
 on:
+  push:
+    branches:
+      - '*.x'
   release:
     types: [published]
 
