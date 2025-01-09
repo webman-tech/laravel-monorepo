@@ -6,19 +6,17 @@ class Install
     const WEBMAN_PLUGIN = true;
 
     /**
-     * @var array
-     */
-    protected static $pathRelation = array (
-  'copy/config/plugin/webman-tech/laravel-translation' => 'config/plugin/webman-tech/laravel-translation',
-);
-
-    /**
      * Install
      * @return void
      */
     public static function install()
     {
-        static::installByRelation();
+        \WebmanTech\LaravelCache\Install::install();
+        \WebmanTech\LaravelConsole\Install::install();
+        \WebmanTech\LaravelFilesystem\Install::install();
+        \WebmanTech\LaravelHttp\Install::install();
+        \WebmanTech\LaravelTranslation\Install::install();
+        \WebmanTech\LaravelValidation\Install::install();
     }
 
     /**
@@ -27,48 +25,11 @@ class Install
      */
     public static function uninstall()
     {
-        self::uninstallByRelation();
+        \WebmanTech\LaravelCache\Install::uninstall();
+        \WebmanTech\LaravelConsole\Install::uninstall();
+        \WebmanTech\LaravelFilesystem\Install::uninstall();
+        \WebmanTech\LaravelHttp\Install::uninstall();
+        \WebmanTech\LaravelTranslation\Install::uninstall();
+        \WebmanTech\LaravelValidation\Install::uninstall();
     }
-
-    /**
-     * installByRelation
-     * @return void
-     */
-    public static function installByRelation()
-    {
-        foreach (static::$pathRelation as $source => $dest) {
-            if ($pos = strrpos($dest, '/')) {
-                $parent_dir = base_path().'/'.substr($dest, 0, $pos);
-                if (!is_dir($parent_dir)) {
-                    mkdir($parent_dir, 0777, true);
-                }
-            }
-            //symlink(__DIR__ . "/$source", base_path()."/$dest");
-            copy_dir(__DIR__ . "/$source", base_path()."/$dest");
-            echo "Create $dest
-";
-        }
-    }
-
-    /**
-     * uninstallByRelation
-     * @return void
-     */
-    public static function uninstallByRelation()
-    {
-        foreach (static::$pathRelation as $source => $dest) {
-            $path = base_path()."/$dest";
-            if (!is_dir($path) && !is_file($path)) {
-                continue;
-            }
-            echo "Remove $dest
-";
-            if (is_file($path) || is_link($path)) {
-                unlink($path);
-                continue;
-            }
-            remove_dir($path);
-        }
-    }
-
 }
