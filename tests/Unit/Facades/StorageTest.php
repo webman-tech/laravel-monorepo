@@ -9,7 +9,6 @@ use Webman\Http\Response;
 use WebmanTech\LaravelFilesystem\Facades\File;
 use WebmanTech\LaravelFilesystem\Facades\Storage;
 use WebmanTech\LaravelFilesystem\FilesystemManager;
-use WebmanTech\LaravelFilesystem\VersionHelper;
 
 beforeEach(function () {
     $this->testPath = normalizePath(storage_path('test-storage'));
@@ -156,7 +155,7 @@ test('filesystem function', function () {
     // delete 删除
     $filename = 'delete.txt';
     $filename2 = 'delete2.txt';
-    expect(Storage::delete($filename))->toEqual(VersionHelper::isGteFlysystem3());
+    expect(Storage::delete($filename))->toBeTrue();
     // 删除不存在的文件，league/flysystem v3 时返回为 true
     Storage::put($filename, 'delete');
     expect(Storage::delete($filename))->toBeTrue();
@@ -167,7 +166,7 @@ test('filesystem function', function () {
     expect(Storage::delete([$filename, $filename2]))->toBeTrue();
     // 删除多个存在的文件
     Storage::put($filename, 'delete');
-    expect(Storage::delete([$filename, $filename2]))->toEqual(VersionHelper::isGteFlysystem3());
+    expect(Storage::delete([$filename, $filename2]))->toBeTrue();
 
     // 删除多个存在，有一个不存在时，league/flysystem v3 时返回为 true
     // copy 复制
@@ -274,7 +273,7 @@ test('filesystem function', function () {
 
     // deleteDirectory 删除目录
     $path = 'deleteDirectory';
-    expect(Storage::deleteDirectory($path))->toEqual(VersionHelper::isGteFlysystem3());
+    expect(Storage::deleteDirectory($path))->toBeTrue();
     // 删除不存在的目录时，league/flysystem v3 时返回为 true
     Storage::makeDirectory($path);
     expect(Storage::deleteDirectory($path))->toBeTrue();
