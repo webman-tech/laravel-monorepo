@@ -2,7 +2,7 @@
 
 use Webman\Http\Request as WebmanRequest;
 use WebmanTech\LaravelHttp\Facades\LaravelRequest;
-use WebmanTech\LaravelHttp\Request;
+use WebmanTech\LaravelHttp\Mock\Request;
 
 test('instance', function () {
     expect(LaravelRequest::instance())->toBeInstanceOf(Request::class);

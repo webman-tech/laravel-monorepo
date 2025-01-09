@@ -48,7 +48,6 @@ $configs = [
         'add' => [
             ' *',
             ' * @see \Illuminate\Http\Request',
-            ' * @see \WebmanTech\LaravelHttp\Request',
             ' * @method static \Illuminate\Http\Request createFromWebman(\Webman\Http\Request|null $request = null)',
         ],
     ],

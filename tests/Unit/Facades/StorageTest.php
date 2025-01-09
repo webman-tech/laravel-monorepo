@@ -38,13 +38,7 @@ test('filesystem manager function', function () {
 });
 
 test('filesystem manager build', function () {
-    try {
-        expect(Storage::build(storage_path() . '/app'))->toBeInstanceOf(Filesystem::class);
-    } catch (Throwable $e) {
-        if (strpos($e->getMessage(), 'Call to undefined method') !== false) {
-            $this->markTestSkipped('>= 8 才有该方法');
-        }
-    }
+    expect(Storage::build(storage_path() . '/app'))->toBeInstanceOf(Filesystem::class);
 });
 
 test('filesystem function', function () {

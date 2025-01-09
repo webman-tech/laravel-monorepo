@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\ValidationException;
 use WebmanTech\LaravelHttp\Helper\ConfigHelper;
 use WebmanTech\LaravelHttp\Helper\ExtComponentGetter;
-use WebmanTech\LaravelHttp\Request as IlluminateRequest;
+use WebmanTech\LaravelHttp\Mock\Request as IlluminateRequest;
 use WebmanTech\LaravelValidation\Facades\Validator;
 
 /**
@@ -185,7 +185,6 @@ use WebmanTech\LaravelValidation\Facades\Validator;
  * @method static array validateWithBag(string $errorBag, $rules, ...$params)
  *
  * @see \Illuminate\Http\Request
- * @see \WebmanTech\LaravelHttp\Request
  * @method static \Illuminate\Http\Request createFromWebman(\Webman\Http\Request|null $request = null)
  */
 class LaravelRequest
