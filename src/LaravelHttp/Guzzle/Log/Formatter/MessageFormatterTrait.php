@@ -1,6 +1,6 @@
 <?php
 
-namespace WebmanTech\LaravelHttpClient\Guzzle\Log\Formatter;
+namespace WebmanTech\LaravelHttp\Guzzle\Log\Formatter;
 
 use Illuminate\Support\Str;
 use Psr\Http\Message\RequestInterface;

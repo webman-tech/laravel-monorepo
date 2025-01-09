@@ -1,5 +1,5 @@
 <?php
-namespace WebmanTech\LaravelHttpClient;
+namespace WebmanTech\LaravelHttp;
 
 class Install
 {
@@ -9,7 +9,7 @@ class Install
      * @var array
      */
     protected static $pathRelation = array (
-  'copy/config/plugin/webman-tech/laravel-http-client' => 'config/plugin/webman-tech/laravel-http-client',
+  'copy/config/plugin' => 'config/plugin/webman-tech/laravel-http',
 );
 
     /**

@@ -43,3 +43,25 @@ function something()
 {
     // ..
 }
+
+function get_misc_path(string $name): string
+{
+    return __DIR__ . "/Fixtures/misc/{$name}";
+}
+
+function get_misc_content(string $name): string
+{
+    $content = file_get_contents(get_misc_path($name));
+
+    if (str_starts_with($name, 'http/')) {
+        $content = str_replace("\n", "\r\n", $content);
+        $content = str_replace("\r\n\n", "\r\n", $content);
+        if (!str_contains($content, "\r\n\r\n")) {
+            $content .= "\r\n";
+        } else {
+            $content = rtrim($content);
+        }
+    }
+
+    return $content;
+}

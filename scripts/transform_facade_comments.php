@@ -19,12 +19,37 @@ $configs = [
             ' * @see \WebmanTech\LaravelConsole\Kernel',
         ],
     ],
-    \WebmanTech\LaravelHttpClient\Facades\Http::class => [
+    \WebmanTech\LaravelHttp\Facades\Http::class => [
         'from' => \Illuminate\Support\Facades\Http::class,
         'add' => [
             ' *',
             ' * @see \Illuminate\Http\Client\Factory',
             ' * @see \Illuminate\Support\Facades\Http',
+        ],
+    ],
+    \WebmanTech\LaravelHttp\Facades\LaravelRequest::class => [
+        'from' => \Illuminate\Support\Facades\Request::class,
+        'change' => [
+            'remove_fns' => [
+                'instance', // 已经在类中提供了
+                // route 不支持
+                'route',
+                // session 不支持
+                'session',
+                'getSession',
+                'setLaravelSession',
+                'hasPreviousSession',
+                'setSession',
+                'hasSession',
+                // URL 的，macro 未注入不支持
+                'hasValidSignature',
+            ],
+        ],
+        'add' => [
+            ' *',
+            ' * @see \Illuminate\Http\Request',
+            ' * @see \WebmanTech\LaravelHttp\Request',
+            ' * @method static \Illuminate\Http\Request createFromWebman(\Webman\Http\Request|null $request = null)',
         ],
     ],
     \WebmanTech\LaravelCache\Facades\Cache::class => [

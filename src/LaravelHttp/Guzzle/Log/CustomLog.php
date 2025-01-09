@@ -1,12 +1,12 @@
 <?php
 
-namespace WebmanTech\LaravelHttpClient\Guzzle\Log;
+namespace WebmanTech\LaravelHttp\Guzzle\Log;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use support\Log;
-use WebmanTech\LaravelHttpClient\Guzzle\Log\Formatter\MessageFormatterInterface;
-use WebmanTech\LaravelHttpClient\Guzzle\Log\Formatter\PsrMessageFormatter;
+use WebmanTech\LaravelHttp\Guzzle\Log\Formatter\MessageFormatterInterface;
+use WebmanTech\LaravelHttp\Guzzle\Log\Formatter\PsrMessageFormatter;
 
 class CustomLog implements CustomLogInterface
 {

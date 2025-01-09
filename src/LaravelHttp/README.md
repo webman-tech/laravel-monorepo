@@ -1,17 +1,17 @@
-# webman-tech/laravel-http-client
+# webman-tech/laravel-http
 
-Laravel [illuminate/http](https://packagist.org/packages/illuminate/http) 中的 HttpClient for webman
+Laravel [illuminate/http](https://packagist.org/packages/illuminate/http) 中的 HttpClient、Request、UploadedFile For webman
 
 ## 介绍
 
 站在巨人（laravel）的肩膀上使 http 请求使用更加*可靠*和*便捷*
 
-所有方法和配置与 laravel 几乎一模一样，因此使用方式完全参考 [Laravel文档](https://laravel.com/docs/http-client) 即可
+所有方法和配置与 laravel 几乎一模一样，因此使用方式完全参考 [Laravel httpClient 文档](https://laravel.com/docs/http-client) 和 [Laravel request 文档](https://laravel.com/docs/requests) 即可
 
 ## 安装
 
 ```bash
-composer require webman-tech/laravel-http-client
+composer require webman-tech/laravel-http
 ```
 
 ## 使用
@@ -21,8 +21,10 @@ composer require webman-tech/laravel-http-client
 ### Facade 入口
 
 使用 `WebmanTech\LaravelHttpClient\Facades\Http` 代替 `Illuminate\Support\Facades\Http`
+使用 `WebmanTech\LaravelHttpClient\Facades\LaravelRequest`（为了强调别名特意加的 Laravel 前缀） 代替 `Illuminate\Support\Facades\Request`
+使用 `WebmanTech\LaravelHttpClient\Facades\LaravelUploadedFile` 来快速 wrapper `Webman\UploadedFile` 为 `Illuminate\Http\UploadedFile`
 
-### 请求日志
+### http client 请求日志
 
 配置文件 `config/plugin/webman-tech/laravel-http-client/app.php` 中的 `log` 栏目可以配置日志相关
 
@@ -38,13 +40,13 @@ composer require webman-tech/laravel-http-client
 - 自动截取部分请求或响应的 body，防止日志过大
 - 自动忽略请求或相应是 file 的，防止日志过大
 
-### 默认的 guzzle options 配置
+#### 默认的 guzzle options 配置
 
 配置文件 `config/plugin/webman-tech/laravel-http-client/app.php` 中的 `guzzle` 栏目可以配置 guzzle 的默认配置
 
 会在每次发送请求时使用该默认值
 
-### 快速定义与简化 api 调用
+#### 快速定义与简化 api 调用
 
 如果对同一个站点的接口请求比较多，建议通过 `macros` 来预定义一些接口的请求信息（比如 baseUrl、Headers 等）
 
@@ -72,7 +74,7 @@ return [
 $response = \WebmanTech\LaravelHttpClient\Facades\Http::httpbin()->get('get', ['abc' => 'xyz']);
 ```
 
-#### 建议
+### 建议
 
 为了 macros 的代码提示，建议新建一个 `support/facade/Http` 继承自 `WebmanTech\LaravelHttpClient\Facades\Http`，然后顶部添加注释用于代码提示
 

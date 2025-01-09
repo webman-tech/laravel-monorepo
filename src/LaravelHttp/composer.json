@@ -1,0 +1,18 @@
+{
+  "name": "webman-tech/laravel-http",
+  "type": "library",
+  "license": "MIT",
+  "description": "Webman plugin webman-tech/laravel-http",
+  "require": {
+    "php": "^8.2",
+    "illuminate/http": "^11.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "WebmanTech\\LaravelHttp\\": ""
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}

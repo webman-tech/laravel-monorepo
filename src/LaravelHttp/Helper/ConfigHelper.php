@@ -1,6 +1,6 @@
 <?php
 
-namespace WebmanTech\LaravelHttpClient\Helper;
+namespace WebmanTech\LaravelHttp\Helper;
 
 /**
  * @internal
@@ -15,7 +15,7 @@ class ConfigHelper
      */
     public static function get(string $key, $default = null)
     {
-        return config("plugin.webman-tech.laravel-http-client.{$key}", $default);
+        return config("plugin.webman-tech.laravel-http.{$key}", $default);
     }
 
     /**

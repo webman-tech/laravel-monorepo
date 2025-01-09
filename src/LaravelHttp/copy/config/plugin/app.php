@@ -27,7 +27,7 @@ return [
         /**
          * 自定义日志
          *
-         * 返回 WebmanTech\LaravelHttpClient\Guzzle\Log\CustomLogInterface 时使用 @see WebmanTech\LaravelHttpClient\Guzzle\Log\Middleware::__invoke()
+         * 返回 WebmanTech\LaravelHttp\Guzzle\Log\CustomLogInterface 时使用 @see WebmanTech\LaravelHttp\Guzzle\Log\Middleware::__invoke()
          * 返回 null 时使用 guzzle 的 @see GuzzleHttp\Middleware::log()
          * 返回 callable 时使用自定义 middleware @link https://docs.guzzlephp.org/en/stable/handlers-and-middleware.html#middleware
          *
@@ -35,12 +35,12 @@ return [
          */
         'custom' => function (array $config) {
             /**
-             * @see \WebmanTech\LaravelHttpClient\Guzzle\Log\CustomLog::$config
+             * @see \WebmanTech\LaravelHttp\Guzzle\Log\CustomLog::$config
              */
             $config = [
                 'log_channel' => $config['channel'],
             ];
-            return new \WebmanTech\LaravelHttpClient\Guzzle\Log\CustomLog($config);
+            return new \WebmanTech\LaravelHttp\Guzzle\Log\CustomLog($config);
         }
     ],
     /**

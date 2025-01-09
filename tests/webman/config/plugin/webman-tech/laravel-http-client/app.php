@@ -1,9 +1,9 @@
 <?php
 
 use Psr\Http\Message\RequestInterface;
-use WebmanTech\LaravelHttpClient\Facades\Http;
-use WebmanTech\LaravelHttpClient\Guzzle\Log\Formatter\JsonMessageFormatter;
-use WebmanTech\LaravelHttpClient\Guzzle\Log\Formatter\PsrMessageFormatter;
+use WebmanTech\LaravelHttp\Facades\Http;
+use WebmanTech\LaravelHttp\Guzzle\Log\Formatter\JsonMessageFormatter;
+use WebmanTech\LaravelHttp\Guzzle\Log\Formatter\PsrMessageFormatter;
 
 return [
     'enable' => true,
@@ -32,7 +32,7 @@ return [
         /**
          * 自定义日志
          *
-         * 返回 WebmanTech\LaravelHttpClient\Guzzle\Log\CustomLogInterface 时使用 @see WebmanTech\LaravelHttpClient\Guzzle\Log\Middleware::__invoke()
+         * 返回 WebmanTech\LaravelHttp\Guzzle\Log\CustomLogInterface 时使用 @see WebmanTech\LaravelHttp\Guzzle\Log\Middleware::__invoke()
          * 返回 null 时使用 guzzle 的 @see GuzzleHttp\Middleware::log()
          * 返回 callable 时使用自定义 middleware @link https://docs.guzzlephp.org/en/stable/handlers-and-middleware.html#middleware
          *
@@ -40,7 +40,7 @@ return [
          */
         'custom' => function (array $config) {
             /**
-             * @see \WebmanTech\LaravelHttpClient\Guzzle\Log\CustomLog::$config
+             * @see \WebmanTech\LaravelHttp\Guzzle\Log\CustomLog::$config
              */
             $config = [
                 'log_channel' => $config['channel'],
@@ -55,7 +55,7 @@ return [
                     return PsrMessageFormatter::class;
                 }
             ];
-            return new \WebmanTech\LaravelHttpClient\Guzzle\Log\CustomLog($config);
+            return new \WebmanTech\LaravelHttp\Guzzle\Log\CustomLog($config);
         }
     ],
     /**
@@ -73,7 +73,7 @@ return [
     'macros' => [
         // 测试用
         'httpbin' => function () {
-            return Http::baseUrl(config('plugin.webman-tech.laravel-http-client.app.httpbin_host'))
+            return Http::baseUrl(config('plugin.webman-tech.laravel-http.app.httpbin_host'))
                 ->asJson();
         }
     ],

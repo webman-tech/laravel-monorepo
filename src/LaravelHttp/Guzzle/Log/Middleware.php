@@ -1,6 +1,6 @@
 <?php
 
-namespace WebmanTech\LaravelHttpClient\Guzzle\Log;
+namespace WebmanTech\LaravelHttp\Guzzle\Log;
 
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;

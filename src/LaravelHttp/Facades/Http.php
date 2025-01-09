@@ -1,6 +1,6 @@
 <?php
 
-namespace WebmanTech\LaravelHttpClient\Facades;
+namespace WebmanTech\LaravelHttp\Facades;
 
 use Closure;
 use GuzzleHttp\MessageFormatter;
@@ -9,9 +9,9 @@ use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\PendingRequest;
 use support\Container;
 use support\Log;
-use WebmanTech\LaravelHttpClient\Guzzle\Log\CustomLogInterface;
-use WebmanTech\LaravelHttpClient\Guzzle\Log\Middleware as LogMiddleware;
-use WebmanTech\LaravelHttpClient\Helper\ConfigHelper;
+use WebmanTech\LaravelHttp\Guzzle\Log\CustomLogInterface;
+use WebmanTech\LaravelHttp\Guzzle\Log\Middleware as LogMiddleware;
+use WebmanTech\LaravelHttp\Helper\ConfigHelper;
 
 /**
  * @method static \Illuminate\Http\Client\Factory globalMiddleware(callable $middleware)
