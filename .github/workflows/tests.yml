@@ -12,11 +12,14 @@ jobs:
     strategy:
       matrix:
         php: [8.2, 8.3, 8.4]
+        stability: [prefer-lowest, prefer-stable]
     services:
       go-httpbin:
         image: mccutchen/go-httpbin
         ports:
           - 8080:8080
+
+    name: PHP ${{ matrix.php }} - ${{ matrix.stability }}
 
     steps:
       - name: Checkout
@@ -28,6 +31,8 @@ jobs:
           php-version: ${{ matrix.php }}
           coverage: xdebug
           #extensions: 'redis'
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
 
       - name: Get composer cache directory
         id: composer-cache
@@ -38,10 +43,10 @@ jobs:
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: php${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
-          restore-keys: php${{ matrix.php }}-composer-
+          restore-keys: php${{ matrix.php }}-${{ matrix.stability }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+        run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress
 
       - name: Run test
         run: composer test-all
