@@ -5,6 +5,8 @@ on:
     branches:
       - '*.x'
   pull_request:
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   phpunit:
@@ -12,7 +14,10 @@ jobs:
     strategy:
       matrix:
         php: [8.2, 8.3, 8.4]
-        stability: [prefer-lowest, prefer-stable]
+        stability: [
+          #prefer-lowest, 问题较多
+          prefer-stable
+        ]
     services:
       go-httpbin:
         image: mccutchen/go-httpbin
