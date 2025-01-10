@@ -20,6 +20,11 @@ test('artisan', function () {
     $this->assertStringContainsString('make:controller', $listOutput);
     $this->assertStringContainsString('plugin:create', $listOutput);
 
+    // 扫描 illuminate/database 的命令
+    $this->assertStringContainsString('migrate', $listOutput);
+    $this->assertStringContainsString('migrate:rollback', $listOutput);
+    $this->assertStringContainsString('make:migration', $listOutput);
+
     // 扫描 app/command 的命令
     $this->assertStringContainsString('sample:symfony', $listOutput);
     $this->assertStringContainsString('sample:laravel', $listOutput);
