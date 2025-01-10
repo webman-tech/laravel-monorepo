@@ -65,3 +65,20 @@ function get_misc_content(string $name): string
 
     return $content;
 }
+
+function php84_error_reporting_change(): void
+{
+    if (!version_compare(PHP_VERSION, '8.4.0', '>=')) {
+        return;
+    }
+    \Tests\TestCase::$context['errorReporting'] = error_reporting();
+    error_reporting(E_ALL & ~E_DEPRECATED);
+}
+
+function php84_error_reporting_reset(): void
+{
+    if (!version_compare(PHP_VERSION, '8.4.0', '>=')) {
+        return;
+    }
+    error_reporting(\Tests\TestCase::$context['errorReporting']);
+}

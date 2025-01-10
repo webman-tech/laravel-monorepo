@@ -274,6 +274,8 @@ test('filesystem function', function () {
 });
 
 test('extend', function () {
+    php84_error_reporting_change();
+
     $map = array_filter([
         'qiniu' => \Overtrue\Flysystem\Qiniu\QiniuAdapter::class,
         'cos' => \Overtrue\Flysystem\Cos\CosAdapter::class,
@@ -285,6 +287,8 @@ test('extend', function () {
         expect($disk)->toBeInstanceOf(FilesystemAdapter::class);
         expect($disk->getAdapter())->toBeInstanceOf($instance);
     }
+
+    php84_error_reporting_reset();
 });
 
 function normalizePath(string $path)

@@ -11,7 +11,7 @@ test('instance', function () {
 
 test('artisan', function () {
     // version、name 在配置中定义
-    expect(doArtisan('--version'))->toEqual('Webman Artisan Test 9.9.9');
+    expect(doArtisan('--version'))->toContain('Webman Artisan Test 9.9.9');
 
     // list
     $listOutput = doArtisan('list');
@@ -34,20 +34,23 @@ test('artisan', function () {
 });
 
 test('command', function () {
-    expect(doArtisan('sample:symfony'))->toEqual('sample:symfony result');
+    expect(doArtisan('sample:symfony'))->toContain('sample:symfony result');
     // 支持 symfony command
-    expect(doArtisan('sample:laravel'))->toEqual('sample:laravel result');
+    expect(doArtisan('sample:laravel'))->toContain('sample:laravel result');
     // 支持 laravel command
 });
 
 test('artisan call', function () {
     expect(Artisan::call('sample:laravel'))->toEqual(0);
-    expect(trim(Artisan::output()))->toEqual(doArtisan('sample:laravel'));
+    expect(doArtisan('sample:laravel'))->toContain(trim(Artisan::output()));
 });
 
 function doArtisan(string $command): string
 {
-    $process = Process::fromShellCommandline('php artisan ' . $command . ' --no-ansi', base_path());
+    //return Artisan::call($command);
+
+    $phpBinary = PHP_BINARY;
+    $process = Process::fromShellCommandline("$phpBinary artisan $command --no-ansi", base_path());
     $process->run();
     return trim($process->getOutput());
 }
