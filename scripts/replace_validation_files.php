@@ -4,7 +4,8 @@
  * 从 https://github.com/Laravel-Lang/lang 读取翻译文件
  */
 
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/utils.php';
 
 use Symfony\Component\VarExporter\VarExporter;
 
@@ -20,8 +21,7 @@ $replace = <<<PHP
  */
 PHP;
 $content = str_replace("<?php", $replace, $content);
-file_put_contents($basePath. '/en/validation.php', $content);
-echo 'Done';
+write_file($basePath. '/en/validation.php', $content, true);
 $enValidation = require $basePath. '/en/validation.php';
 
 $extraLang = ['zh_CN'];
@@ -30,8 +30,7 @@ foreach ($extraLang as $lang) {
     $link = "https://raw.githubusercontent.com/Laravel-Lang/lang/refs/heads/main/locales/{$lang}/php.json";
     $data = json_decode(file_get_contents($link), true);
     $langValidation = deep_replace_array_value($enValidation, $data);
-    file_put_contents($basePath. "/{$lang}/validation.php", export_php_array($langValidation, $link));
-    echo 'Done';
+    write_file($basePath. "/{$lang}/validation.php", export_php_array($langValidation, $link), true);
 }
 
 function deep_replace_array_value(array $base, array $target, string $prefix = ''): array

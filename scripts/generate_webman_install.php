@@ -3,22 +3,16 @@
  * 自动生成全局的 webman Install.php
  */
 
-use Symfony\Component\Finder\Finder;
-
-require __DIR__ . '/../vendor/autoload.php';
-
-$composerFile = __DIR__ . '/../composer.json';
-$finder = Finder::create()
-    ->in(__DIR__ . '/../src')
-    ->depth(1)
-    ->name('Install.php');
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/utils.php';
 
 $install = [];
 $uninstall = [];
-foreach ($finder as $file) {
-    $install[] = '        \\WebmanTech\\' . $file->getRelativePath() . '\\Install::install();';
-    $uninstall[] = '        \\WebmanTech\\' . $file->getRelativePath() . '\\Install::uninstall();';
-}
+get_packages()
+    ->each(function ($package) use(&$install, &$uninstall) {
+        $install[] = '        \\WebmanTech\\' . $package['dir_name'] . '\\Install::install();';
+        $uninstall[] = '        \\WebmanTech\\' . $package['dir_name'] . '\\Install::uninstall();';
+    });
 $install = implode("\n", $install);
 $uninstall = implode("\n", $uninstall);
 
@@ -51,5 +45,4 @@ class Install
 
 PHP;
 
-file_put_contents(__DIR__ . '/../src/Install.php', $content);
-echo "Done\n";
+write_file('src/Install.php', $content);
