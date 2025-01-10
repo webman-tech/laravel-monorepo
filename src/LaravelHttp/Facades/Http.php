@@ -2,16 +2,9 @@
 
 namespace WebmanTech\LaravelHttp\Facades;
 
-use Closure;
-use GuzzleHttp\MessageFormatter;
-use GuzzleHttp\Middleware;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Client\Factory;
-use Illuminate\Http\Client\PendingRequest;
-use support\Container;
-use support\Log;
-use WebmanTech\LaravelHttp\Guzzle\Log\CustomLogInterface;
-use WebmanTech\LaravelHttp\Guzzle\Log\Middleware as LogMiddleware;
-use WebmanTech\LaravelHttp\Helper\ConfigHelper;
+use WebmanTech\LaravelHttp\Helper\ExtComponentGetter;
 
 /**
  * @method static \Illuminate\Http\Client\Factory globalMiddleware(callable $middleware)
@@ -107,143 +100,37 @@ use WebmanTech\LaravelHttp\Helper\ConfigHelper;
  */
 class Http
 {
-    protected static $config = null;
+    protected static bool $booted = false;
 
     /**
      * @return Factory
      */
     public static function instance(): Factory
     {
-        if (static::$config === null) {
-            static::$config = ConfigHelper::get('app', []);
+        $factory = new Factory(ExtComponentGetter::getNoCheck(['events', Dispatcher::class], [
+            'default' => fn() => null,
+        ]));
+
+        if (!static::$booted) {
+            static::boot($factory);
+            static::$booted = true;
         }
 
-        $factory = Container::get(Factory::class);
-
-        static::bootMacros($factory);
-
         return $factory;
+    }
+
+    /**
+     * 用于注册一些自定义的方法
+     * @param Factory $factory
+     * @return void
+     */
+    protected static function boot(Factory $factory): void
+    {
     }
 
     public static function __callStatic($name, $arguments)
     {
         $factory = static::instance();
-
-        // 直接调用这些方法会直接调用 PendingRequest 中的方法返回 Response，因此需要手动 attach
-        if (in_array($name, [
-            'delete', 'get', 'head', 'patch', 'post', 'put', 'send',
-        ])) {
-            $http = static::newPendingRequest($factory);
-            static::attachExtension($http);
-            return $http->{$name}(...$arguments);
-        }
-
-        // pool 方法的 callable 中会直接调用 PendingRequest 的方法返回 Response，所以需要手动 attach
-        if ($name === 'pool') {
-            // TODO 目前暂未想好如何自动 attach
-        }
-
-        // 其他返回 PendingRequest 的情况
-        $result = $factory->{$name}(...$arguments);
-        if ($result instanceof PendingRequest) {
-            static::attachExtension($result);
-            return $result;
-        }
-
-        // 返回非 PendingRequest 的情况
-        return $result;
-    }
-
-    protected static $_macrosLoaded = [];
-
-    /**
-     * @param Factory $factory
-     * @return void
-     */
-    protected static function bootMacros(Factory $factory): void
-    {
-        if (isset(static::$_macrosLoaded['macros'])) {
-            return;
-        }
-        static::$_macrosLoaded['macros'] = true;
-
-        $macros = static::$config['macros'] ?? [];
-        if (!$macros) {
-            return;
-        }
-        /** @var Factory $class */
-        $class = get_class($factory);
-        foreach ($macros as $name => $macro) {
-            $class::macro($name, $macro);
-        }
-    }
-
-    /**
-     * @param PendingRequest $http
-     */
-    private static function attachExtension($http)
-    {
-        $attachedExtensionOptionKey = '__attached_extension';
-
-        $options = $http->getOptions();
-        if (array_key_exists($attachedExtensionOptionKey, $options)) {
-            // PendingRequest 不能多次附加 extension
-            return;
-        }
-
-        if ($logMiddleware = static::getLogMiddleware()) {
-            $http->withMiddleware($logMiddleware);
-        }
-        $options = array_merge(static::getDefaultOptions(), [
-            $attachedExtensionOptionKey => 1,
-        ]);
-        $http->withOptions($options);
-    }
-
-    /**
-     * @see Factory::newPendingRequest()
-     * @param Factory $factory
-     * @return PendingRequest
-     */
-    private static function newPendingRequest(Factory $factory): PendingRequest
-    {
-        return new PendingRequest($factory);
-    }
-
-    /**
-     * @return callable|null
-     */
-    protected static function getLogMiddleware(): ?callable
-    {
-        $config = static::$config['log'] ?? [];
-        if (!isset($config['enable']) || !$config['enable']) {
-            return null;
-        }
-        $config = array_merge([
-            'channel' => 'default',
-            'level' => 'info',
-            'format' => MessageFormatter::CLF,
-            'custom' => null,
-        ], $config);
-
-        if ($config['custom']) {
-            $customLog = call_user_func($config['custom'], $config);
-            if ($customLog instanceof CustomLogInterface) {
-                return (new LogMiddleware($customLog))->__invoke();
-            }
-            if ($customLog instanceof Closure) {
-                return $customLog;
-            }
-        }
-
-        return Middleware::log(Log::channel($config['channel']), new MessageFormatter($config['format']), $config['level']);
-    }
-
-    /**
-     * @return array
-     */
-    protected static function getDefaultOptions(): array
-    {
-        return static::$config['guzzle'] ?? [];
+        return $factory->{$name}(...$arguments);
     }
 }

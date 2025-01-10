@@ -5,6 +5,7 @@
   "description": "Webman plugin webman-tech/laravel-http",
   "require": {
     "php": "^8.2",
+    "illuminate/events": "^11.0",
     "illuminate/http": "^11.0"
   },
   "autoload": {

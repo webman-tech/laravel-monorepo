@@ -6,6 +6,9 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Arr;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Tests\Fixtures\HttpExtFacade;
 use WebmanTech\LaravelHttp\Facades\Http;
 
 pest()->group('http');
@@ -158,81 +161,32 @@ test('pool', function () {
 });
 
 test('macro', function () {
-    // macro 已经通过 config 配置
+    $httpBinHost = $this->httpBinHost;
+    Http::macro('httpbin', function () use ($httpBinHost) {
+        return Http::baseUrl($httpBinHost);
+    });
+
     expect(Http::httpbin()->get('anything')->ok())->toBeTrue();
 });
 
-function ensureLogFile(bool $reset = true)
-{
-    $date = date('Y-m-d');
-    $logFile = runtime_path() . "/logs/webman-{$date}.log";
-    if (!file_exists($logFile)) {
-        $dirname = dirname($logFile);
-        if (!is_dir($dirname)) {
-            mkdir(dirname($logFile), 0777, true);
-        }
-        file_put_contents($logFile, '');
-    }
-    if ($reset) {
-        file_put_contents($logFile, '');
-    }
-    return $logFile;
-}
+test('middleware', function () {
+    $response = Http::withRequestMiddleware(function (RequestInterface $request) {
+        dump(1);
+        return $request->withHeader('X-First', 'foo');
+    })
+        ->withResponseMiddleware(function (ResponseInterface $response) {
+            $content = json_decode($response->getBody(), true);
+            expect(getHeader($content['headers'], 'X-First'))->toEqual('foo');
 
-test('log', function () {
-    $logFile = ensureLogFile();
-    $logSize = strlen(file_get_contents($logFile));
-
-    $assetLogged = function (bool $is) use ($logFile, &$logSize) {
-        $newLogSize = strlen(file_get_contents($logFile));
-        // 通过比较日志大小来判断是否记了日志
-        expect($is)->toBeBool(($newLogSize - $logSize) > 10);
-        $logSize = $newLogSize;
-    };
-
-    // 直接发请求的记录日志
-    Http::get("{$this->httpBinHost}/anything");
-    $assetLogged(true);
-
-    // macro 形式的记录日志
-    Http::httpbin()->get('anything');
-    $assetLogged(true);
-
-    // pool 目前不会记录日志
-    Http::pool(function (Pool $pool) {
-        $pool->get("{$this->httpBinHost}/anything");
-    });
-    $assetLogged(false);
+            return $response;
+        })
+        ->get("{$this->httpBinHost}/anything");
+    expect(getHeader($response['headers'], 'X-First'))->toEqual('foo');
 });
 
-test('different formatter', function () {
-    $logFile = ensureLogFile();
+test('boot', function () {
+    $response = HttpExtFacade::httpbin()->get('anything');
 
-    Http::post("{$this->httpBinHost}/anything", [
-        'a' => 'b'
-    ]);
-
-    // 人工检查日志格式是不是 psr 的
-    expect(true)->toBeTrue();
-
-    // 此处是在 config 中配置了 query 中有 use_json_formatter=1 的，使用 json 格式的日志
-    Http::post("{$this->httpBinHost}/anything?use_json_formatter=1", [
-        'password' => '123456'
-    ]);
-
-    // 人工检查日志格式是不是 json 的
-    expect(true)->toBeTrue();
-
-    // 检查 password 是否被替换
-    $content = file_get_contents($logFile);
-    $this->assertStringContainsString('\"password\":\"***\"', $content);
-
-    Http::attach(
-        'file', file_get_contents(__DIR__ . '/../../Fixtures/misc/test.txt')
-    )->post("{$this->httpBinHost}/anything", [
-        'a' => 'b'
-    ]);
-
-    // 人工检查日志是否将 form 的 body 屏蔽掉了
-    expect(true)->toBeTrue();
+    expect($response->ok())->toBeTrue()
+        ->and(getHeader($response['headers'], 'X-Global-Header'))->toEqual('foo');
 });
