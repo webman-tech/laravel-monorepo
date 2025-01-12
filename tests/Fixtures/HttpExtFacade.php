@@ -8,6 +8,8 @@ use WebmanTech\LaravelHttp\Facades\Http;
 
 class HttpExtFacade extends Http
 {
+    protected static bool $booted = false; // 为了在同时使用 Http 时 boot 分开执行
+
     protected static function boot(Factory $factory): void
     {
         $factory->globalRequestMiddleware(fn (RequestInterface $request) => $request->withHeader(

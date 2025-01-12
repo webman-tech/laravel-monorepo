@@ -171,7 +171,6 @@ test('macro', function () {
 
 test('middleware', function () {
     $response = Http::withRequestMiddleware(function (RequestInterface $request) {
-        dump(1);
         return $request->withHeader('X-First', 'foo');
     })
         ->withResponseMiddleware(function (ResponseInterface $response) {
