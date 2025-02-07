@@ -3,6 +3,9 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $configs = [
+    \WebmanTech\LaravelDatabase\Facades\DB::class => [
+        'from' => \Illuminate\Support\Facades\DB::class,
+    ],
     \WebmanTech\LaravelConsole\Facades\Artisan::class => [
         'from' => \Illuminate\Support\Facades\Artisan::class,
         'change' => [
@@ -99,7 +102,6 @@ $configs = [
 
 foreach ($configs as $targetClass => $config) {
     $methods = read_class_static_methods_from_comments($config['from']);
-
     $comments = [
         '/**'
     ];
@@ -131,7 +133,7 @@ function read_class_static_methods_from_comments(string $className): array
             if ($comment && str_starts_with($comment, '@method static')) {
                 $comment = str_replace('@method static ', '', $comment);
                 $return = explode(' ', $comment)[0];
-                $functionFull = trim(str_replace($return, '', $comment));
+                $functionFull = substr($comment, strlen($return) + 1);
                 $function = explode('(', $functionFull)[0];
                 return [
                     'return' => $return,
