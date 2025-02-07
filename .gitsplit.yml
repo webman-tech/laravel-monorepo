@@ -11,6 +11,8 @@ splits:
     target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-filesystem.git"
   - prefix: "src/LaravelHttp"
     target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-http.git"
+  - prefix: "src/LaravelRedis"
+    target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-redis.git"
   - prefix: "src/LaravelTranslation"
     target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-translation.git"
   - prefix: "src/LaravelValidation"

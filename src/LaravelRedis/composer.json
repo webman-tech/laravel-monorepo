@@ -1,0 +1,20 @@
+{
+  "name": "webman-tech/laravel-redis",
+  "type": "library",
+  "license": "MIT",
+  "description": "Webman plugin webman-tech/laravel-redis",
+  "require": {
+    "php": "^8.2",
+    "illuminate/redis": "^11.0",
+    "illuminate/events": "^11.0",
+    "webman/redis": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "WebmanTech\\LaravelRedis\\": ""
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}

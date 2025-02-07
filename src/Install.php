@@ -16,6 +16,7 @@ class Install
         \WebmanTech\LaravelDatabase\Install::install();
         \WebmanTech\LaravelFilesystem\Install::install();
         \WebmanTech\LaravelHttp\Install::install();
+        \WebmanTech\LaravelRedis\Install::install();
         \WebmanTech\LaravelTranslation\Install::install();
         \WebmanTech\LaravelValidation\Install::install();
     }
@@ -31,6 +32,7 @@ class Install
         \WebmanTech\LaravelDatabase\Install::uninstall();
         \WebmanTech\LaravelFilesystem\Install::uninstall();
         \WebmanTech\LaravelHttp\Install::uninstall();
+        \WebmanTech\LaravelRedis\Install::uninstall();
         \WebmanTech\LaravelTranslation\Install::uninstall();
         \WebmanTech\LaravelValidation\Install::uninstall();
     }

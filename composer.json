@@ -32,10 +32,12 @@
     "illuminate/filesystem": "^11.0",
     "illuminate/http": "^11.0",
     "illuminate/pagination": "^11.0",
+    "illuminate/redis": "^11.0",
     "illuminate/translation": "^11.0",
     "illuminate/validation": "^11.0",
     "league/flysystem": "^3.0",
-    "webman/database": "^2.1"
+    "webman/database": "^2.1",
+    "webman/redis": "^2.1"
   },
   "require-dev": {
     "alphasnow/aliyun-oss-laravel": "^4.9",
@@ -59,6 +61,7 @@
     "webman-tech/laravel-database": "self.version",
     "webman-tech/laravel-filesystem": "self.version",
     "webman-tech/laravel-http": "self.version",
+    "webman-tech/laravel-redis": "self.version",
     "webman-tech/laravel-translation": "self.version",
     "webman-tech/laravel-validation": "self.version"
   },
