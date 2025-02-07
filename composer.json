@@ -27,17 +27,19 @@
     "illuminate/config": "^11.0",
     "illuminate/console": "^11.0",
     "illuminate/container": "^11.0",
+    "illuminate/database": "^11.0",
     "illuminate/events": "^11.0",
     "illuminate/filesystem": "^11.0",
     "illuminate/http": "^11.0",
+    "illuminate/pagination": "^11.0",
     "illuminate/translation": "^11.0",
     "illuminate/validation": "^11.0",
-    "league/flysystem": "^3.0"
+    "league/flysystem": "^3.0",
+    "webman/database": "^2.1"
   },
   "require-dev": {
     "alphasnow/aliyun-oss-laravel": "^4.9",
     "ergebnis/composer-normalize": "^2.45",
-    "illuminate/database": "^11.0",
     "monolog/monolog": "^3.8",
     "overtrue/flysystem-cos": "^5.1",
     "overtrue/flysystem-qiniu": "^3.2",
@@ -49,12 +51,12 @@
     "symfony/var-dumper": "^7.0",
     "symfony/var-exporter": "^7.0",
     "webman/console": "^2.1",
-    "webman/database": "^2.1",
     "workerman/webman-framework": "^2.1"
   },
   "replace": {
     "webman-tech/laravel-cache": "self.version",
     "webman-tech/laravel-console": "self.version",
+    "webman-tech/laravel-database": "self.version",
     "webman-tech/laravel-filesystem": "self.version",
     "webman-tech/laravel-http": "self.version",
     "webman-tech/laravel-translation": "self.version",

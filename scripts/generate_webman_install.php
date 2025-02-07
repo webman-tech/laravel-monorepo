@@ -10,6 +10,9 @@ $install = [];
 $uninstall = [];
 get_packages()
     ->each(function ($package) use(&$install, &$uninstall) {
+        if (!file_exists($package['dir_path'] . '/Install.php')) {
+            return;
+        }
         $install[] = '        \\WebmanTech\\' . $package['dir_name'] . '\\Install::install();';
         $uninstall[] = '        \\WebmanTech\\' . $package['dir_name'] . '\\Install::uninstall();';
     });

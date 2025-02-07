@@ -5,6 +5,8 @@ splits:
     target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-cache.git"
   - prefix: "src/LaravelConsole"
     target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-console.git"
+  - prefix: "src/LaravelDatabase"
+    target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-database.git"
   - prefix: "src/LaravelFilesystem"
     target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-filesystem.git"
   - prefix: "src/LaravelHttp"

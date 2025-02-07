@@ -1,0 +1,21 @@
+{
+  "name": "webman-tech/laravel-database",
+  "type": "library",
+  "license": "MIT",
+  "description": "Webman plugin webman-tech/laravel-database",
+  "require": {
+    "php": "^8.2",
+    "illuminate/database": "^11.0",
+    "illuminate/pagination": "^11.0",
+    "illuminate/events": "^11.0",
+    "webman/database": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "WebmanTech\\LaravelDatabase\\": ""
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
