@@ -48,8 +48,9 @@
     "symfony/translation": "^7.0",
     "symfony/var-dumper": "^7.0",
     "symfony/var-exporter": "^7.0",
-    "webman/console": "^1.3",
-    "workerman/webman-framework": "^1.6.8"
+    "webman/console": "^2.1",
+    "webman/database": "^2.1",
+    "workerman/webman-framework": "^2.1"
   },
   "replace": {
     "webman-tech/laravel-cache": "self.version",
