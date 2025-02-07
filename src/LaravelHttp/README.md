@@ -1,5 +1,7 @@
 # webman-tech/laravel-http
 
+> Split from [webman-tech/laravel-monorepo](https://github.com/webman-tech/laravel-monorepo)
+
 Laravel [illuminate/http](https://packagist.org/packages/illuminate/http) 中的 HttpClient、Request、UploadedFile For webman
 
 ## 介绍

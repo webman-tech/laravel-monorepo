@@ -1,5 +1,7 @@
 # webman-tech/laravel-translation
 
+> Split from [webman-tech/laravel-monorepo](https://github.com/webman-tech/laravel-monorepo)
+
 Laravel [illuminate/translation](https://packagist.org/packages/illuminate/translation) for webman
 
 ## 介绍

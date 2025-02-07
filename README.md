@@ -1,6 +1,6 @@
 # webman-tech/laravel-monorepo
 
-适用于 webman 的 laravel 组件的 monorepo 仓库
+适用于 webman 的 laravel 组件的 monorepo 仓库，大版本随 laravel 的主版本号一致
 
 ## 安装
 
