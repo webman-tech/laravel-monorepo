@@ -2,17 +2,21 @@
 
 use Illuminate\Support\Str;
 
+if (!function_exists('get_env')) {
+    function get_env(string $key, $default = null)
+    {
+        return $_ENV[$key] ?? $default;
+    }
+}
+
 /**
- * @link https://github.com/laravel/laravel/blob/8.x/config/cache.php
+ * @link https://github.com/laravel/laravel/blob/11.x/config/cache.php
  */
 return [
-    'default' => getenv('CACHE_DRIVER') ?: 'file',
+    'default' => get_env('CACHE_DRIVER') ?: 'file',
     'stores' => [
         'apc' => [
             'driver' => 'apc',
-        ],
-        'null' => [
-            'driver' => 'null',
         ],
         'array' => [
             'driver' => 'array',
@@ -30,18 +34,18 @@ return [
         ],
         'memcached' => [
             'driver' => 'memcached',
-            'persistent_id' => getenv('MEMCACHED_PERSISTENT_ID'),
+            'persistent_id' => get_env('MEMCACHED_PERSISTENT_ID'),
             'sasl' => [
-                getenv('MEMCACHED_USERNAME'),
-                getenv('MEMCACHED_PASSWORD'),
+                get_env('MEMCACHED_USERNAME'),
+                get_env('MEMCACHED_PASSWORD'),
             ],
             'options' => [
                 // Memcached::OPT_CONNECT_TIMEOUT => 2000,
             ],
             'servers' => [
                 [
-                    'host' => getenv('MEMCACHED_HOST') ?: '127.0.0.1',
-                    'port' => getenv('MEMCACHED_PORT') ?: 11211,
+                    'host' => get_env('MEMCACHED_HOST') ?: '127.0.0.1',
+                    'port' => get_env('MEMCACHED_PORT') ?: 11211,
                     'weight' => 100,
                 ],
             ],
@@ -53,16 +57,18 @@ return [
         ],
         'dynamodb' => [
             'driver' => 'dynamodb',
-            'key' => getenv('AWS_ACCESS_KEY_ID'),
-            'secret' => getenv('AWS_SECRET_ACCESS_KEY'),
-            'region' => getenv('AWS_DEFAULT_REGION') ?: 'us-east-1',
-            'table' => getenv('DYNAMODB_CACHE_TABLE') ?: 'cache',
-            'endpoint' => getenv('DYNAMODB_ENDPOINT'),
+            'key' => get_env('AWS_ACCESS_KEY_ID'),
+            'secret' => get_env('AWS_SECRET_ACCESS_KEY'),
+            'region' => get_env('AWS_DEFAULT_REGION') ?: 'us-east-1',
+            'table' => get_env('DYNAMODB_CACHE_TABLE') ?: 'cache',
+            'endpoint' => get_env('DYNAMODB_ENDPOINT'),
         ],
         'octane' => [
             'driver' => 'octane',
         ],
     ],
-    'prefix' => getenv('CACHE_PREFIX', Str::slug(config('app.name', 'webman'), '_').'_cache'),
+    // 一般不需要配置 prefix，比如 redis 下，实际已经在 redis 下配置过了
+    'prefix' => '',
+    //'prefix' => get_env('CACHE_PREFIX', Str::slug(config('app.name', 'webman'), '_').'_cache'),
     'extend' => null,
 ];

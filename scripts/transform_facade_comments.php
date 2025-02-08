@@ -62,6 +62,13 @@ $configs = [
             ' * @see \Illuminate\Cache\Repository',
         ],
     ],
+    \WebmanTech\LaravelCache\Facades\CacheRateLimiter::class => [
+        'from' => \Illuminate\Support\Facades\RateLimiter::class,
+        'add' => [
+            ' *',
+            ' * @see \Illuminate\Cache\RateLimiter',
+        ],
+    ],
     \WebmanTech\LaravelFilesystem\Facades\Storage::class => [
         'from' => \Illuminate\Support\Facades\Storage::class,
         'change' => [
