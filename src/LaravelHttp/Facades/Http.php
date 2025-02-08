@@ -2,15 +2,22 @@
 
 namespace WebmanTech\LaravelHttp\Facades;
 
+use Closure;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Client\Factory;
+use support\Log;
+use WebmanTech\LaravelHttp\Guzzle\Log\CustomLogInterface;
+use WebmanTech\LaravelHttp\Guzzle\Log\Middleware as LogMiddleware;
+use WebmanTech\LaravelHttp\Helper\ConfigHelper;
 use WebmanTech\LaravelHttp\Helper\ExtComponentGetter;
 
 /**
  * @method static \Illuminate\Http\Client\Factory globalMiddleware(callable $middleware)
  * @method static \Illuminate\Http\Client\Factory globalRequestMiddleware(callable $middleware)
  * @method static \Illuminate\Http\Client\Factory globalResponseMiddleware(callable $middleware)
- * @method static \Illuminate\Http\Client\Factory globalOptions(\Closure|array $options)
+ * @method static \Illuminate\Http\Client\Factory globalOptions(Closure|array $options)
  * @method static \GuzzleHttp\Promise\PromiseInterface response(array|string|null $body = null, int $status = 200, array $headers = [])
  * @method static \GuzzleHttp\Promise\PromiseInterface failedConnection(string|null $message = null)
  * @method static \Illuminate\Http\Client\ResponseSequence sequence(array $responses = [])
@@ -58,7 +65,7 @@ use WebmanTech\LaravelHttp\Helper\ExtComponentGetter;
  * @method static \Illuminate\Http\Client\PendingRequest sink(string|resource $to)
  * @method static \Illuminate\Http\Client\PendingRequest timeout(int|float $seconds)
  * @method static \Illuminate\Http\Client\PendingRequest connectTimeout(int|float $seconds)
- * @method static \Illuminate\Http\Client\PendingRequest retry(array|int $times, \Closure|int $sleepMilliseconds = 0, callable|null $when = null, bool $throw = true)
+ * @method static \Illuminate\Http\Client\PendingRequest retry(array|int $times, Closure|int $sleepMilliseconds = 0, callable|null $when = null, bool $throw = true)
  * @method static \Illuminate\Http\Client\PendingRequest withOptions(array $options)
  * @method static \Illuminate\Http\Client\PendingRequest withMiddleware(callable $middleware)
  * @method static \Illuminate\Http\Client\PendingRequest withRequestMiddleware(callable $middleware)
@@ -81,9 +88,9 @@ use WebmanTech\LaravelHttp\Helper\ExtComponentGetter;
  * @method static \GuzzleHttp\Client createClient(\GuzzleHttp\HandlerStack $handlerStack)
  * @method static \GuzzleHttp\HandlerStack buildHandlerStack()
  * @method static \GuzzleHttp\HandlerStack pushHandlers(\GuzzleHttp\HandlerStack $handlerStack)
- * @method static \Closure buildBeforeSendingHandler()
- * @method static \Closure buildRecorderHandler()
- * @method static \Closure buildStubHandler()
+ * @method static Closure buildBeforeSendingHandler()
+ * @method static Closure buildRecorderHandler()
+ * @method static Closure buildStubHandler()
  * @method static \GuzzleHttp\Psr7\RequestInterface runBeforeSendingCallbacks(\GuzzleHttp\Psr7\RequestInterface $request, array $options)
  * @method static array mergeOptions(array ...$options)
  * @method static \Illuminate\Http\Client\PendingRequest stub(callable $callback)
@@ -92,31 +99,37 @@ use WebmanTech\LaravelHttp\Helper\ExtComponentGetter;
  * @method static \Illuminate\Http\Client\PendingRequest setClient(\GuzzleHttp\Client $client)
  * @method static \Illuminate\Http\Client\PendingRequest setHandler(callable $handler)
  * @method static array getOptions()
- * @method static \Illuminate\Http\Client\PendingRequest|mixed when(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
- * @method static \Illuminate\Http\Client\PendingRequest|mixed unless(\Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
+ * @method static \Illuminate\Http\Client\PendingRequest|mixed when(Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
+ * @method static \Illuminate\Http\Client\PendingRequest|mixed unless(Closure|mixed|null $value = null, callable|null $callback = null, callable|null $default = null)
  *
  * @see \Illuminate\Http\Client\Factory
  * @see \Illuminate\Support\Facades\Http
  */
 class Http
 {
-    protected static bool $booted = false;
+    protected static ?Factory $instance = null;
 
     /**
      * @return Factory
      */
     public static function instance(): Factory
     {
-        $factory = new Factory(ExtComponentGetter::getNoCheck(['events', Dispatcher::class], [
+        if (static::$instance === null) {
+            $factory = static::createFactory();
+            static::boot($factory);
+            static::$instance = $factory;
+        }
+        return static::$instance;
+    }
+
+    /**
+     * @return Factory
+     */
+    protected static function createFactory(): Factory
+    {
+        return new Factory(ExtComponentGetter::getNoCheck(['events', Dispatcher::class], [
             'default' => fn() => null,
         ]));
-
-        if (!static::$booted) {
-            static::boot($factory);
-            static::$booted = true;
-        }
-
-        return $factory;
     }
 
     /**
@@ -126,11 +139,59 @@ class Http
      */
     protected static function boot(Factory $factory): void
     {
+        $factoryClass = get_class($factory);
+
+        $config = array_merge([
+            'macros' => [],
+            'guzzle' => [],
+            'log' => [],
+        ], ConfigHelper::get('http-client', []));
+
+        // boot macros
+        foreach ($config['macros'] as $name => $macro) {
+            $factoryClass::macro($name, $macro);
+        }
+
+        // add guzzle options
+        $factory->globalOptions($config['guzzle']);
+
+        // add log middleware
+        if ($logMiddleware = static::getLogMiddleware($config['log'])) {
+            $factory->globalMiddleware($logMiddleware);
+        }
+    }
+
+    /**
+     * @param array $config
+     * @return callable|null
+     */
+    protected static function getLogMiddleware(array $config): ?callable
+    {
+        if (!isset($config['enable']) || !$config['enable']) {
+            return null;
+        }
+        $config = array_merge([
+            'channel' => 'default',
+            'level' => 'info',
+            'format' => MessageFormatter::CLF,
+            'custom' => null,
+        ], $config);
+
+        if ($config['custom'] instanceof Closure) {
+            $customLog = call_user_func($config['custom'], $config);
+            if ($customLog instanceof CustomLogInterface) {
+                return (new LogMiddleware($customLog))->__invoke();
+            }
+            if ($customLog instanceof Closure) {
+                return $customLog;
+            }
+        }
+
+        return Middleware::log(Log::channel($config['channel']), new MessageFormatter($config['format']), $config['level']);
     }
 
     public static function __callStatic($name, $arguments)
     {
-        $factory = static::instance();
-        return $factory->{$name}(...$arguments);
+        return static::instance()->{$name}(...$arguments);
     }
 }
