@@ -5,7 +5,7 @@ namespace WebmanTech\LaravelTranslation\Helper;
 /**
  * @internal
  */
-class ConfigHelper
+final class ConfigHelper
 {
     /**
      * 获取配置
