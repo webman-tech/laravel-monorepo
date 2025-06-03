@@ -47,6 +47,17 @@ class LaravelUploadedFile extends IlluminateUploadedFile
         return $self;
     }
 
+    public static function createForSymfonyFromWebman(WebmanUploadedFile $file): SymfonyUploadedFile
+    {
+        return new SymfonyUploadedFile(
+            $file->getRealPath() ?: '',
+            $file->getUploadName() ?? '',
+            $file->getUploadMimeType(),
+            $file->getUploadErrorCode(),
+            false
+        );
+    }
+
     protected $_originFile;
 
     protected function withOriginFile($file): static

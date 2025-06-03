@@ -5,6 +5,7 @@ namespace WebmanTech\LaravelHttp\Facades;
 use Closure;
 use Illuminate\Contracts\Validation\Factory as ValidatorFactory;
 use Illuminate\Validation\ValidationException;
+use Webman\Http\UploadFile as WebmanUploadFile;
 use WebmanTech\LaravelHttp\Helper\ConfigHelper;
 use WebmanTech\LaravelHttp\Helper\ExtComponentGetter;
 use WebmanTech\LaravelHttp\Mock\Request as IlluminateRequest;
@@ -273,12 +274,23 @@ class LaravelRequest
                 $server['HTTP_' . str_replace('-', '_', strtoupper($key))] = $value;
             }
 
+            $files = $wRequest->file();
+            if ($files instanceof WebmanUploadFile) {
+                $files = [$files];
+            }
+            if (is_array($files)) {
+                foreach ($files as &$file) {
+                    $file = LaravelUploadedFile::createForSymfonyFromWebman($file);
+                }
+                unset($file);
+            }
+
             return IlluminateRequest::create(
                 $wRequest->uri(),
                 $wRequest->method(),
                 $wRequest->method() === 'GET' ? $wRequest->get() : $wRequest->post(),
                 $wRequest->cookie(),
-                $wRequest->file(),
+                $files,
                 $server,
                 $wRequest->rawBody()
             );
