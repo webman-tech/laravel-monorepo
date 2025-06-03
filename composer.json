@@ -92,6 +92,9 @@
     "sort-packages": true
   },
   "scripts": {
+    "script:update-packages": "php scripts/update_packages.php",
+    "script:replace-validation-files": "php scripts/replace_validation_files.php",
+    "script:transform-facade-comments": "php scripts/transform_facade_comments.php",
     "test": "pest --exclude-group=http",
     "test-all": "pest",
     "test-coverage": "pest --coverage",
