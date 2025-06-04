@@ -2,59 +2,103 @@
 
 namespace WebmanTech\LaravelHttp\Helper;
 
+use Illuminate\Container\Container as LaravelContainer;
+use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
+use Illuminate\Contracts\Filesystem\Factory as FilesystemFactory;
+use Illuminate\Contracts\Validation\Factory as ValidatorFactory;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Events\EventServiceProvider;
+use Illuminate\Filesystem\FilesystemServiceProvider;
+use Illuminate\Validation\ValidationServiceProvider;
 use support\Container;
+use WebmanTech\LaravelFilesystem\Facades\Storage;
+use WebmanTech\LaravelValidation\Facades\Validator;
 
 /**
  * @internal
  */
 final class ExtComponentGetter
 {
-    /**
-     * @template T of class-string
-     * @param T $needClass
-     * @param array $pick
-     * @return T
-     */
-    public static function get(string $needClass, array $pick = [])
+    private static array $componentsDefine = [];
+    private static array $components = [];
+
+    private static function getDefinedComponents(): array
     {
-        $component = null;
-        if (Container::has($needClass)) {
-            $component = Container::get($needClass);
-        }
-        if (!$component && $pick) {
-            foreach ($pick as $className => $getInstance) {
-                if ($className === 'default' || class_exists($className)) {
-                    $component = $getInstance();
-                    break;
+        if (!self::$componentsDefine) {
+            $define = [
+                /** @see FilesystemServiceProvider::registerManager() */
+                FilesystemFactory::class => [
+                    'alias' => ['filesystem'],
+                    'singleton' => fn() => class_exists(Storage::class)
+                        ? Storage::instance()
+                        : throw new \InvalidArgumentException('install `webman-tech/laravel-filesystem` first'),
+                ],
+                /** @see ValidationServiceProvider::registerValidationFactory() */
+                ValidatorFactory::class => [
+                    'alias' => ['validator'],
+                    'singleton' => fn() => class_exists(Validator::class)
+                        ? fn() => Validator::instance()
+                        : throw new \InvalidArgumentException('install `webman-tech/laravel-validator` first'),
+                ],
+                /** @see EventServiceProvider::register() */
+                DispatcherContract::class => [
+                    'alias' => ['events'],
+                    'singleton' => fn() => new Dispatcher(LaravelContainer::getInstance()),
+                ],
+            ];
+
+            foreach ($define as $className => $options) {
+                $ids = array_merge([$className], $options['alias'] ?? []);
+                $componentGetter = null;
+                foreach ($ids as $id) {
+                    if (Container::has($id)) {
+                        $componentGetter = fn() => Container::get($id);
+                        break;
+                    }
+                }
+                if ($componentGetter === null) {
+                    $componentGetter = $options['singleton'] ?? null;
+                }
+                if ($componentGetter === null) {
+                    throw new \InvalidArgumentException('cannot find component ' . $className);
+                }
+                // 将所有 id 注册为组件
+                foreach ($ids as $id) {
+                    self::$componentsDefine[$id] = [$ids, $componentGetter];
                 }
             }
         }
-        if (!$component instanceof $needClass) {
-            throw new \RuntimeException($needClass . ' is not exist');
-        }
 
-        return $component;
+        return self::$componentsDefine;
     }
 
     /**
-     * @param array $components
-     * @param array $pick
-     * @return mixed
+     * @template T of class-string
+     * @param T $needClass
+     * @return T
      */
-    public static function getNoCheck(array $components, array $pick = []): mixed
+    public static function get(string $needClass)
     {
-        foreach ($components as $component) {
-            if (Container::has($component)) {
-                return Container::get($component);
-            }
+        $component = self::$components[$needClass] ?? null;
+        if ($component) {
+            return $component;
         }
-        if ($pick) {
-            foreach ($pick as $className => $getInstance) {
-                if ($className === 'default' || class_exists($className)) {
-                    return $getInstance();
-                }
-            }
+
+        $componentDefine = self::getDefinedComponents()[$needClass] ?? null;
+        if ($componentDefine === null) {
+            throw new \InvalidArgumentException($needClass . ' is not defined');
         }
-        return null;
+
+        [$ids, $componentGetter] = $componentDefine;
+        $component = $componentGetter();
+        if ($component === null) {
+            throw new \InvalidArgumentException($needClass . ' fetch from componentGetter is null');
+        }
+        // 将所有相关组件都注册上
+        foreach ($ids as $id) {
+            self::$components[$id] = $component;
+        }
+
+        return $component;
     }
 }

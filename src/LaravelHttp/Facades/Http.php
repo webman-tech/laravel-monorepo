@@ -127,9 +127,7 @@ class Http
      */
     protected static function createFactory(): Factory
     {
-        return new Factory(ExtComponentGetter::getNoCheck(['events', Dispatcher::class], [
-            'default' => fn() => null,
-        ]));
+        return new Factory(ExtComponentGetter::get(Dispatcher::class));
     }
 
     /**

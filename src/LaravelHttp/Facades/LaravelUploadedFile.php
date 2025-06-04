@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile as SymfonyUploadedFile;
 use Webman\Http\UploadFile as WebmanUploadedFile;
-use WebmanTech\LaravelFilesystem\Facades\Storage;
 use WebmanTech\LaravelHttp\Helper\ExtComponentGetter;
 
 class LaravelUploadedFile extends IlluminateUploadedFile
@@ -116,7 +115,7 @@ class LaravelUploadedFile extends IlluminateUploadedFile
 
         $disk = Arr::pull($options, 'disk');
 
-        $storage = ExtComponentGetter::get(FilesystemFactory::class, [Storage::class, fn() => Storage::instance()]);
+        $storage = ExtComponentGetter::get(FilesystemFactory::class);
 
         return $storage->disk($disk)->putFileAs(
             $path, $this, $name, $options

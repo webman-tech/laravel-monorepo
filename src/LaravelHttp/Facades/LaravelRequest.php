@@ -9,7 +9,6 @@ use Webman\Http\UploadFile as WebmanUploadFile;
 use WebmanTech\LaravelHttp\Helper\ConfigHelper;
 use WebmanTech\LaravelHttp\Helper\ExtComponentGetter;
 use WebmanTech\LaravelHttp\Mock\Request as IlluminateRequest;
-use WebmanTech\LaravelValidation\Facades\Validator;
 
 /**
  * @method static \Illuminate\Http\Request capture()
@@ -224,7 +223,7 @@ class LaravelRequest
          */
         IlluminateRequest::macro('validate', function (array $rules, ...$params) {
             /** @var IlluminateRequest $this */
-            $validator = ExtComponentGetter::get(ValidatorFactory::class, [Validator::class, fn() => Validator::instance()]);
+            $validator = ExtComponentGetter::get(ValidatorFactory::class);
             return $validator->make($this->all(), $rules, ...$params)->validate();
         });
 
