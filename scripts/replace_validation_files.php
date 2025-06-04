@@ -10,7 +10,7 @@ require_once __DIR__ . '/utils.php';
 use Symfony\Component\VarExporter\VarExporter;
 
 $basePath = __DIR__ . '/../src/LaravelValidation/copy/resource/translations';
-$enLink = 'https://raw.githubusercontent.com/laravel/framework/refs/heads/11.x/src/Illuminate/Translation/lang/en/validation.php';
+$enLink = 'https://raw.githubusercontent.com/laravel/framework/refs/heads/12.x/src/Illuminate/Translation/lang/en/validation.php';
 
 echo "Getting en validation contents...\n";
 $content = file_get_contents($enLink);

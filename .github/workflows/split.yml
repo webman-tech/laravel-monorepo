@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Fetch all history
-          ref: "11.x" # Force checkout the branch to split its commits as well
+          ref: "12.x" # Force checkout the branch to split its commits as well
       - name: split
         uses: docker://jderusse/gitsplit:latest
         with:

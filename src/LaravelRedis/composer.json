@@ -5,8 +5,8 @@
   "description": "Webman plugin webman-tech/laravel-redis",
   "require": {
     "php": "^8.2",
-    "illuminate/redis": "^11.0",
-    "illuminate/events": "^11.0",
+    "illuminate/redis": "^12.0",
+    "illuminate/events": "^12.0",
     "webman/redis": "^2.1"
   },
   "autoload": {

@@ -5,9 +5,9 @@
   "description": "Webman plugin webman-tech/laravel-database",
   "require": {
     "php": "^8.2",
-    "illuminate/database": "^11.0",
-    "illuminate/pagination": "^11.0",
-    "illuminate/events": "^11.0",
+    "illuminate/database": "^12.0",
+    "illuminate/pagination": "^12.0",
+    "illuminate/events": "^12.0",
     "webman/database": "^2.1"
   },
   "autoload": {
