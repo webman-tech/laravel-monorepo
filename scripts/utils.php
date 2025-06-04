@@ -43,6 +43,7 @@ function get_packages()
                 'dir_name' => $dirName,
                 'composer_name' => $composerName,
                 'git_name' => $gitName,
+                'class_namespace' => 'WebmanTech\\' . $dirName,
             ];
         });
     return $packages;

@@ -1,3 +1,5 @@
 <?php
 
-return new \Webman\Container();
+use Tests\Fixtures\Container;
+
+return Container::getInstance();

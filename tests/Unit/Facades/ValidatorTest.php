@@ -2,9 +2,14 @@
 
 use Illuminate\Contracts\Validation\Factory as FactoryContract;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Tests\Fixtures\Models\User;
 use WebmanTech\LaravelValidation\Facades\Validator;
 
+beforeEach(function () {
+    Validator::reset();
+});
 
 test('instance', function () {
     expect(Validator::instance())->toBeInstanceOf(FactoryContract::class);
@@ -61,7 +66,54 @@ test('messages', function () {
     }
 });
 
+test('messages use translation', function () {
+    try {
+        Validator::validate([
+            'title' => ''
+        ], [
+            'title' => 'required'
+        ]);
+    } catch (ValidationException $e) {
+        expect($e->errors()['title'][0])->toEqual('title 不能为空。');
+    }
+
+    // 切换语言
+    $locale = locale();
+    locale('en');
+
+    try {
+        Validator::validate([
+            'title' => ''
+        ], [
+            'title' => 'required'
+        ]);
+    } catch (ValidationException $e) {
+        expect($e->errors()['title'][0])->toEqual('The title field is required.');
+    }
+
+    // 切换回去，防止影响后续的测试
+    locale($locale);
+});
+
 test('rules', function () {
     expect(true)->toBeTrue();
     // https://laravel.com/docs/11.x/validation#available-validation-rules
+});
+
+test('rules unique', function () {
+    $username = Str::random();
+    User::query()
+        ->insert([
+            'username' => $username,
+        ]);
+
+    try {
+        Validator::validate([
+            'username' => $username,
+        ], [
+            'username' => 'unique:users'
+        ]);
+    } catch (ValidationException $e) {
+        expect($e->errors()['username'][0])->toEqual('username 已经存在。');
+    }
 });

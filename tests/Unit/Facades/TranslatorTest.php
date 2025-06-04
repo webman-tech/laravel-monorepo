@@ -12,6 +12,8 @@ test('instance', function () {
 });
 
 test('locale', function () {
+    $locale = locale();
+
     // 当前 locale
     expect(locale())->toEqual('zh_CN');
 
@@ -69,4 +71,7 @@ test('locale', function () {
     expect(trans_choice('messages.apple_count3', 1))->toEqual('There is one apple');
     expect(trans_choice('messages.apple_count3', 18, ['count' => 18]))->toEqual('There are 18 apples');
     expect(trans_choice('messages.apple_count3', 25))->toEqual('There are many apples');
+
+    // 切换回去，防止影响后续的测试
+    locale($locale);
 });
