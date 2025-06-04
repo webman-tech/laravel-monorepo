@@ -31,7 +31,7 @@ $json['_comment'] = $comments->unique()->values()->toArray();
 $json['replace'] = $replace;
 $json['autoload']['files'] = $autoloadFiles->toArray();
 
-$content = json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+$content = json_encode($json, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n";
 
 write_file($composerFile, $content, true);
 

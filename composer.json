@@ -92,6 +92,7 @@
     "sort-packages": true
   },
   "scripts": {
+    "script:clean-temp-files": "php scripts/clean_temp_files.php",
     "script:replace-validation-files": "php scripts/replace_validation_files.php",
     "script:transform-facade-comments": "php scripts/transform_facade_comments.php",
     "script:update-packages": "php scripts/update_packages.php",
