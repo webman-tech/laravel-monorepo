@@ -16,7 +16,7 @@ $readmeFile = root_path('README.md');
 $content = file_get_contents($readmeFile);
 
 $pattern = '/<!-- packages:start -->.*<!-- packages:end -->/s';
-$replacement = '<!-- packages:start -->' . PHP_EOL . $listContent . PHP_EOL . '<!-- packages:end -->';
+$replacement = '<!-- packages:start -->' . PHP_EOL . PHP_EOL . $listContent . PHP_EOL . PHP_EOL . '<!-- packages:end -->';
 $content = preg_replace($pattern, $replacement, $content);
 
 write_file($readmeFile, $content, true);

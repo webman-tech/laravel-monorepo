@@ -4,7 +4,7 @@ on:
     branches:
       - '*.x'
   release:
-    types: [published]
+    types: [ published ]
 
 jobs:
   gitsplit:

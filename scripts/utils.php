@@ -20,7 +20,12 @@ function write_file(string $filename, string $content, bool $isAbsolutePath = fa
     }
     file_put_contents($filename, $content);
 
-    echo "File written: $filename\n";
+    write_log("File written: $filename");
+}
+
+function write_log(string $msg): void
+{
+    echo $msg . "\n";
 }
 
 function get_packages()
