@@ -5,5 +5,4 @@
 
 require __DIR__ . '/generate_readme.php';
 require __DIR__ . '/generate_gitsplit.php';
-require __DIR__ . '/generate_webman_install.php';
 require __DIR__ . '/generate_composer.php';
