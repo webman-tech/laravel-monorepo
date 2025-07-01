@@ -33,7 +33,8 @@
     "sort-packages": true,
     "allow-plugins": {
       "pestphp/pest-plugin": true
-    }
+    },
+    "github-actions-date": "2025-07-01T01:21:11.288Z"
   },
   "scripts": {
     "test": "pest"
