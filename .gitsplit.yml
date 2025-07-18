@@ -19,3 +19,4 @@ splits:
     target: "https://${GH_TOKEN}@github.com/webman-tech/laravel-validation.git"
 origins:
   - ^\d+.x$
+  - ^v\d+\.\d+\.\d+$
