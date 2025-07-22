@@ -32,7 +32,7 @@ final class ExtComponentGetter extends BaseExtComponentGetter
             ValidatorFactory::class => [
                 'alias' => ['validator'],
                 'singleton' => fn() => class_exists(Validator::class)
-                    ? fn() => Validator::instance()
+                    ? Validator::instance()
                     : throw new \InvalidArgumentException('install `webman-tech/laravel-validator` first'),
             ],
             /** @see EventServiceProvider::register() */
