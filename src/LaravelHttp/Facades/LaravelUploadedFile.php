@@ -78,7 +78,7 @@ class LaravelUploadedFile extends IlluminateUploadedFile
      * 使用 webman 的文件移动功能
      * @inheritDoc
      */
-    public function move(string $directory, string $name = null): File
+    public function move(string $directory, ?string $name = null): File
     {
         $file = $this->_originFile instanceof WebmanUploadedFile
             ? $this->_originFile
