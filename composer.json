@@ -100,6 +100,8 @@
     "test": "pest --exclude-group=http",
     "test-all": "pest",
     "test-coverage": "pest --coverage",
-    "test-http": "pest --group=http"
+    "test-http": "pest --group=http",
+    "analyse": "phpstan analyse",
+    "analyse-raw": "phpstan analyse --error-format=raw"
   }
 }

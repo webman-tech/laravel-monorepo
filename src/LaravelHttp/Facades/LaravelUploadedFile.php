@@ -12,6 +12,11 @@ use WebmanTech\LaravelHttp\Helper\ExtComponentGetter;
 
 class LaravelUploadedFile extends IlluminateUploadedFile
 {
+    final public function __construct(string $path, string $originalName, ?string $mimeType = null, ?int $error = null, bool $test = false)
+    {
+        parent::__construct($path, $originalName, $mimeType, $error, $test);
+    }
+
     public static function wrapper(WebmanUploadedFile|IlluminateUploadedFile|SymfonyUploadedFile $file, bool $test = false): static
     {
         if ($file instanceof WebmanUploadedFile) {

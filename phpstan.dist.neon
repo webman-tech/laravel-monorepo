@@ -1,0 +1,13 @@
+# @see https://phpstan.org/config-reference
+parameters:
+	level: 5
+	paths:
+		- src
+	excludePaths:
+		- src/LaravelDatabase/Larastan/*
+	tmpDir: runtime/phpstan-dist
+	ignoreErrors:
+		- '#PHPDoc tag @method for method (.*) parameter \#(.*) contains unknown class (.*)\.#'
+		- '#PHPDoc tag @method for method (.*) return type contains unknown class (.*)\.#'
+		- '#Method WebmanTech\\LaravelConsole\\Mock\\LaravelApp::(\w+)\(\) with return type void returns mixed but should not return anything.#'
+	reportUnmatchedIgnoredErrors: false

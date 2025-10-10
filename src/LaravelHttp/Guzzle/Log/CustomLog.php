@@ -94,7 +94,7 @@ class CustomLog implements CustomLogInterface
 
     protected function getStatusCodeType(int $statusCode): int
     {
-        return substr($statusCode, 0, 1);
+        return (int)substr((string)$statusCode, 0, 1);
     }
 
     protected function isRequestSlow(float $sec): bool

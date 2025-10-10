@@ -231,6 +231,7 @@ class LaravelRequest
             /** @var IlluminateRequest $this */
             try {
                 return $this->validate($rules, ...$params);
+                /** @phpstan-ignore-next-line */
             } catch (ValidationException $e) {
                 $e->errorBag = $errorBag;
 
