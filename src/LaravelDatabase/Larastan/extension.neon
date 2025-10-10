@@ -1,0 +1,19 @@
+parameters:
+	checkModelProperties: false
+
+parametersSchema:
+    checkModelProperties: bool()
+
+services:
+    -
+        class: WebmanTech\LaravelDatabase\Larastan\Methods\EloquentBuilderForwardsCallsExtension
+        tags:
+            - phpstan.broker.methodsClassReflectionExtension
+    -
+        class: WebmanTech\LaravelDatabase\Larastan\Methods\BuilderHelper
+        arguments:
+            checkProperties: %checkModelProperties%
+    -
+        class: WebmanTech\LaravelDatabase\Larastan\Methods\MacroMethodsClassReflectionExtension
+        tags:
+            - phpstan.broker.methodsClassReflectionExtension

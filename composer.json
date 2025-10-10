@@ -46,6 +46,7 @@
     "overtrue/flysystem-cos": "^5.1",
     "overtrue/flysystem-qiniu": "^3.2",
     "pestphp/pest": "^3.7",
+    "phpstan/phpstan": "^2.1",
     "symfony/cache": "^7.0",
     "symfony/http-foundation": "^7.0",
     "symfony/mime": "^7.0",
