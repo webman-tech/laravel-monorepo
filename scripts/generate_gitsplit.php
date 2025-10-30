@@ -22,6 +22,7 @@ splits:
 {$splits}
 origins:
   - ^\d+.x$
+  - ^v\d+\.\d+\.\d+$
 YML;
 
 write_file('.gitsplit.yml', $content);

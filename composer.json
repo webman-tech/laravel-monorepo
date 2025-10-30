@@ -32,6 +32,7 @@
     "illuminate/filesystem": "^12.0",
     "illuminate/http": "^12.0",
     "illuminate/pagination": "^12.0",
+    "illuminate/process": "^12.0",
     "illuminate/redis": "^12.0",
     "illuminate/translation": "^12.0",
     "illuminate/validation": "^12.0",
@@ -62,6 +63,7 @@
     "webman-tech/laravel-database": "self.version",
     "webman-tech/laravel-filesystem": "self.version",
     "webman-tech/laravel-http": "self.version",
+    "webman-tech/laravel-process": "self.version",
     "webman-tech/laravel-redis": "self.version",
     "webman-tech/laravel-translation": "self.version",
     "webman-tech/laravel-validation": "self.version"
@@ -93,6 +95,8 @@
     "sort-packages": true
   },
   "scripts": {
+    "analyse": "phpstan analyse",
+    "analyse-raw": "phpstan analyse --error-format=raw",
     "script:clean-temp-files": "php scripts/clean_temp_files.php",
     "script:replace-validation-files": "php scripts/replace_validation_files.php",
     "script:transform-facade-comments": "php scripts/transform_facade_comments.php",
@@ -100,8 +104,6 @@
     "test": "pest --exclude-group=http",
     "test-all": "pest",
     "test-coverage": "pest --coverage",
-    "test-http": "pest --group=http",
-    "analyse": "phpstan analyse",
-    "analyse-raw": "phpstan analyse --error-format=raw"
+    "test-http": "pest --group=http"
   }
 }

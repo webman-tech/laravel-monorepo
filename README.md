@@ -21,6 +21,7 @@ composer require webman-tech/laravel-monorepo
 - [webman-tech/laravel-database](./src/LaravelDatabase/README.md)
 - [webman-tech/laravel-filesystem](./src/LaravelFilesystem/README.md)
 - [webman-tech/laravel-http](./src/LaravelHttp/README.md)
+- [webman-tech/laravel-process](./src/LaravelProcess/README.md)
 - [webman-tech/laravel-redis](./src/LaravelRedis/README.md)
 - [webman-tech/laravel-translation](./src/LaravelTranslation/README.md)
 - [webman-tech/laravel-validation](./src/LaravelValidation/README.md)

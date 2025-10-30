@@ -105,6 +105,14 @@ $configs = [
             ' * @see \Illuminate\Support\Facades\Validator',
         ],
     ],
+    \WebmanTech\LaravelProcess\Facades\Process::class => [
+        'from' => \Illuminate\Support\Facades\Process::class,
+        'add' => [
+            ' *',
+            ' * @see \Illuminate\Process\Factory',
+            ' * @see \Illuminate\Support\Facades\Process',
+        ],
+    ],
 ];
 
 foreach ($configs as $targetClass => $config) {
