@@ -2,13 +2,7 @@
 
 > Split from [webman-tech/laravel-monorepo](https://github.com/webman-tech/laravel-monorepo)
 
-Laravel [illuminate/process](https://packagist.org/packages/illuminate/process) for webman
-
-## 介绍
-
-## Laravel Process
-
-为 webman 提供的 [Laravel Process](https://laravel.com/docs/processes) 组件。
+适用于 webman 的 Laravel 进程组件，基于 illuminate/process 实现。
 
 ## 安装
 
@@ -16,10 +10,14 @@ Laravel [illuminate/process](https://packagist.org/packages/illuminate/process) 
 composer require webman-tech/laravel-process
 ```
 
-## 使用
+## 简介
 
-所有 API 同 laravel
+该组件将 Laravel 强大的进程管理功能引入 webman 框架中，提供了便捷的进程执行和管理功能。
 
-### Facade 入口
+所有方法和配置与 Laravel 几乎一致，因此使用方式可完全参考 [Laravel Process 文档](https://laravel.com/docs/processes)。
 
-使用 `WebmanTech\LaravelProcess\Facades\Process` 代替 `Illuminate\Support\Facades\Process`
+## 特殊使用说明
+
+### 1. Facades 使用方式
+
+使用 `WebmanTech\LaravelProcess\Facades\Process` 替代 `Illuminate\Support\Facades\Process`

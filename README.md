@@ -28,6 +28,16 @@ composer require webman-tech/laravel-monorepo
 
 <!-- packages:end -->
 
+## 目录结构
+
+- src: 各个组件目录
+- scripts: 辅助 monorepo 的一些常用脚本
+- tests: 测试目录
+    - Fixtures: 测试数据，按照各个组件的目录
+    - Unit: 单元测试
+        - Facades: 基本对应每个组件的 facade 入口
+    - webman: 用于单元测试的一个 webman 极小项目结构
+
 ## remark
 
 - 11.x 12.x 是啥

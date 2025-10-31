@@ -2,13 +2,7 @@
 
 > Split from [webman-tech/laravel-monorepo](https://github.com/webman-tech/laravel-monorepo)
 
-Laravel [illuminate/translation](https://packagist.org/packages/illuminate/translation) for webman
-
-## 介绍
-
-站在巨人（laravel）的肩膀上使本地化使用更加*可靠*和*便捷*
-
-所有方法和配置与 laravel 几乎一模一样，因此使用方式完全参考 [Laravel文档](https://laravel.com/docs/translation) 即可
+适用于 webman 的 Laravel 翻译组件，基于 illuminate/translation 实现。
 
 ## 安装
 
@@ -16,40 +10,38 @@ Laravel [illuminate/translation](https://packagist.org/packages/illuminate/trans
 composer require webman-tech/laravel-translation
 ```
 
-## 使用
+## 简介
 
-所有 API 同 laravel，以下仅对有些特殊的操作做说明
+该组件将 Laravel 强大的翻译和本地化功能引入 webman 框架中，提供了多语言支持和参数替换等功能。
 
-常规使用如下：
+所有方法和配置与 Laravel
+几乎一致，因此使用方式可完全参考 [Laravel Localization 文档](https://laravel.com/docs/localization)。
+
+## 特殊使用说明
+
+### 翻译函数名称
+
+由于 webman 下默认使用 `symfony/translation`，且已经定义过 trans 方法，为了不冲突，此处使用 `transL()`：
 
 ```php
-<?php
-namespace app\controller;
-
-use support\Request;
-
-class FooController
-{
-    public function bar(Request $request) 
-    {
-        $message1 = transL('messages.abc');
-        $message2 = trans_choice('messages.xyz', 2);
-        $message3 = __('messages.mnl');
-        return json([
-            $message1, $message2, $message3
-        ]);
-    }
-}
+$message = transL('messages.welcome');
 ```
 
-### tranL()
+### 语言切换
 
-由于 webman 下默认使用 `symfony/translation`，且已经定义过 trans 方法，为了不冲突，此处使用 `transL()`
+因为没有 Laravel App 的存在，所以不能通过 `App::setLocale()` 和 `App::currentLocale()` 来切换语言。
 
-### 手动切换 locale
+本扩展已经做到根据 `locale()` 自动切换 `transL()`、`trans_choice()`、`__()` 下使用的语言包，无需开发手动设置。
 
-因为没有 Laravel App 的存在，所以不能通过 `App::setLocale()` 和 `App::currentLocale()` 来切换语言
+### 基本使用
 
-且由于 webman 建议的多语言是使用的 `symfony/translation`，并且全局 `locale` 函数也是使用其实现的
+```php
+// 使用 transL()
+$message1 = transL('messages.abc');
 
-因此本扩展基于此原因，已经做到了根据 `locale()` 自动切换 `transL()` `trans_choice()` `__()` 下使用的语言包，无需开发手动设置
+// 使用 trans_choice()
+$message2 = trans_choice('messages.xyz', 2);
+
+// 使用 __()
+$message3 = __('messages.mnl');
+```
