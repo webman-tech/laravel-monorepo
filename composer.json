@@ -34,7 +34,7 @@
     "allow-plugins": {
       "pestphp/pest-plugin": true
     },
-    "github-actions-date": "2025-10-01T01:13:48.477Z"
+    "github-actions-date": "2025-11-01T01:13:06.678Z"
   },
   "scripts": {
     "test": "pest"
