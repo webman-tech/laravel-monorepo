@@ -3,7 +3,7 @@
 use Symfony\Component\Process\Process;
 use WebmanTech\LaravelConsole\Facades\Artisan;
 use WebmanTech\LaravelConsole\Kernel;
-
+use function WebmanTech\CommonUtils\base_path;
 
 test('instance', function () {
     expect(Artisan::instance())->toBeInstanceOf(Kernel::class);

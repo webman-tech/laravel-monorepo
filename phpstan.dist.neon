@@ -5,6 +5,7 @@ parameters:
 		- src
 	excludePaths:
 		- src/LaravelDatabase/Larastan/*
+		- src/*/Helper/ArrayHelper.php # 不是自己写的
 	tmpDir: runtime/phpstan-dist
 	ignoreErrors:
 		- '#PHPDoc tag @method for method (.*) parameter \#(.*) contains unknown class (.*)\.#'

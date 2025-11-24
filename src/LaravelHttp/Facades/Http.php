@@ -7,7 +7,7 @@ use GuzzleHttp\MessageFormatter;
 use GuzzleHttp\Middleware;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Client\Factory;
-use support\Log;
+use WebmanTech\CommonUtils\Log;
 use WebmanTech\LaravelHttp\Guzzle\Log\CustomLogInterface;
 use WebmanTech\LaravelHttp\Guzzle\Log\Middleware as LogMiddleware;
 use WebmanTech\LaravelHttp\Helper\ConfigHelper;

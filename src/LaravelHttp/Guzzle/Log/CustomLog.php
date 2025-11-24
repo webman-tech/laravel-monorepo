@@ -4,7 +4,7 @@ namespace WebmanTech\LaravelHttp\Guzzle\Log;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use support\Log;
+use WebmanTech\CommonUtils\Log;
 use WebmanTech\LaravelHttp\Guzzle\Log\Formatter\MessageFormatterInterface;
 use WebmanTech\LaravelHttp\Guzzle\Log\Formatter\PsrMessageFormatter;
 

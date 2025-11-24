@@ -2,6 +2,8 @@
 
 namespace WebmanTech\LaravelTranslation\Helper;
 
+use function WebmanTech\CommonUtils\config;
+
 /**
  * @internal
  */

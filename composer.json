@@ -37,6 +37,7 @@
     "illuminate/translation": "^12.0",
     "illuminate/validation": "^12.0",
     "league/flysystem": "^3.0",
+    "webman-tech/common-utils": "^5.0 || dev-main",
     "webman/database": "^2.1",
     "webman/redis": "^2.1"
   },

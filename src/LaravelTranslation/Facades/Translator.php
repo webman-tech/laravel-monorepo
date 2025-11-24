@@ -8,6 +8,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Translation\FileLoader;
 use Illuminate\Translation\Translator as LaravelTranslator;
 use WebmanTech\LaravelTranslation\Helper\ConfigHelper;
+use function WebmanTech\CommonUtils\locale;
 
 /**
  * Laravel translation

@@ -2,7 +2,7 @@
 
 use Illuminate\Contracts\Translation\Translator as TranslatorContract;
 use WebmanTech\LaravelTranslation\Facades\Translator;
-
+use function WebmanTech\CommonUtils\locale;
 
 test('instance', function () {
     expect(Translator::instance())->toBeInstanceOf(TranslatorContract::class);

@@ -1,8 +1,13 @@
 <?php
 
+use WebmanTech\CommonUtils\Constants;
+use WebmanTech\CommonUtils\Runtime;
+
+Runtime::$RUNTIME = Constants::RUNTIME_WEBMAN;
+
 function get_env(string $key, $default = null)
 {
-    return $_ENV[$key] ?? $default;
+    return \WebmanTech\CommonUtils\get_env($key, $default);
 }
 
 if (file_exists(__DIR__ . '/env.php')) {
