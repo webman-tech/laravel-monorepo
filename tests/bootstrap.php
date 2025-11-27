@@ -3,7 +3,7 @@
 use WebmanTech\CommonUtils\Constants;
 use WebmanTech\CommonUtils\Runtime;
 
-Runtime::$RUNTIME = Constants::RUNTIME_WEBMAN;
+Runtime::changeRuntime(Constants::RUNTIME_WEBMAN);
 
 function get_env(string $key, $default = null)
 {
