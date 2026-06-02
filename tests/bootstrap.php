@@ -5,6 +5,11 @@ use WebmanTech\CommonUtils\Runtime;
 
 Runtime::changeRuntime(Constants::RUNTIME_WEBMAN);
 
+WebmanTech\CommonUtils\RuntimeCustomRegister::register(
+    WebmanTech\CommonUtils\RuntimeCustomRegister::KEY_TIMER,
+    WebmanTech\CommonUtils\Timer\PcntlTimer::call(...),
+);
+
 function get_env(string $key, $default = null)
 {
     return \WebmanTech\CommonUtils\get_env($key, $default);
