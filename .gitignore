@@ -16,3 +16,6 @@ phpstan.neon
 /artisan
 /app
 /plugin
+
+# e2e 生成物（install 基于最新骨架重建，可抛弃）
+/e2e/webman

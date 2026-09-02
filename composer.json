@@ -55,6 +55,7 @@
     "symfony/translation": "^7.0",
     "symfony/var-dumper": "^7.0",
     "symfony/var-exporter": "^7.0",
+    "webman-tech/testing": "^1.1",
     "webman/console": "^2.1",
     "workerman/webman-framework": "^2.1"
   },
@@ -98,6 +99,9 @@
   "scripts": {
     "analyse": "phpstan analyse",
     "analyse-raw": "phpstan analyse --error-format=raw",
+    "e2e:install": "e2e-setup install webman",
+    "e2e:sync": "e2e-setup sync webman",
+    "e2e:test": "cd e2e/webman && vendor/bin/pest",
     "script:clean-temp-files": "php scripts/clean_temp_files.php",
     "script:replace-validation-files": "php scripts/replace_validation_files.php",
     "script:transform-facade-comments": "php scripts/transform_facade_comments.php",
