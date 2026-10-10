@@ -6,6 +6,8 @@ use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Carbon;
 use Symfony\Component\Clock\MockClock;
 use Tests\Fixtures\Lock\TestableWatchdogLock;
+use Tests\Fixtures\Lock\ThrowingWatchdogLock;
+use Tests\Fixtures\Lock\WeakRefWatchdogLock;
 use WebmanTech\CommonUtils\Timer\PcntlTimer;
 use WebmanTech\LaravelCache\Lock\WatchdogArrayLock;
 use WebmanTech\LaravelCache\Lock\WatchdogCacheLock;
@@ -210,6 +212,86 @@ describe('Watchdog timer 回调行为', function () {
 
         expect($lock->renewCalledCount)->toEqual(2)
             ->and($lock->timerDeleted)->toEqual(0);
+    });
+
+    test('renew exception does not escape the timer callback', function () {
+        $store = new ArrayStore();
+        $lock = new ThrowingWatchdogLock($store, 'tick-throw', 30);
+        $lock->acquire();
+
+        // 关键回归：异常若逃逸到事件循环，会被 Worker errorHandler 升级为 stopAll(250) 重启 worker
+        $lock->tick();
+
+        expect($lock->renewCalledCount)->toEqual(1)
+            ->and($lock->timerDeleted)->toEqual(1)
+            ->and($lock->currentTimerId())->toBeNull();
+    });
+
+    test('log failure does not escape the timer callback', function () {
+        $store = new ArrayStore();
+        $lock = new ThrowingWatchdogLock($store, 'tick-log-fail', 30);
+        $lock->acquire();
+
+        // 日志入口自身抛异常时同样不能逃逸——否则等于换条路径触发 stopAll(250)
+        $lock->onRenewFailureLog(function () {
+            throw new \RuntimeException('logger unavailable');
+        });
+
+        $lock->tick();
+
+        expect($lock->renewCalledCount)->toEqual(1)
+            ->and($lock->timerDeleted)->toEqual(1)
+            ->and($lock->currentTimerId())->toBeNull();
+    });
+
+    test('timer callback does not keep lock alive via strong reference', function () {
+        $store = new ArrayStore();
+        $counter = new stdClass();
+        $counter->del = 0;
+        $counter->renew = 0;
+        $loop = new stdClass();
+        $loop->callbacks = [];
+
+        $lock = new WeakRefWatchdogLock($store, 'weak', 30, $counter, $loop);
+        $lock->acquire();
+
+        $ref = $lock->toWeakRef();
+        expect($loop->callbacks)->toHaveCount(1);
+
+        unset($lock);
+        gc_collect_cycles();
+
+        // 回调只持 WeakReference，否则锁对象被 timer 注册表强持有而永不销毁
+        expect($ref->get())->toBeNull();
+
+        // 触发残留回调不应报错（锁已 GC 时直接返回）
+        foreach ($loop->callbacks as $cb) {
+            $cb();
+        }
+        expect($counter->renew)->toEqual(0);
+    });
+
+    test('destruct stops watchdog so lock expires by TTL', function () {
+        $store = new ArrayStore();
+        $counter = new stdClass();
+        $counter->del = 0;
+        $counter->renew = 0;
+        $loop = new stdClass();
+        $loop->callbacks = [];
+
+        $lock = new WeakRefWatchdogLock($store, 'destruct', 10, $counter, $loop);
+        $lock->acquire();
+
+        expect($store->locks)->toHaveKey('destruct');
+        expect($counter->del)->toEqual(0);
+
+        $ref = $lock->toWeakRef();
+        unset($lock);
+        gc_collect_cycles();
+
+        // 协程异常退出的兜底：__destruct 停表，锁不再被续期，最终按 TTL 过期
+        expect($ref->get())->toBeNull()
+            ->and($counter->del)->toEqual(1);
     });
 });
 
