@@ -2,7 +2,7 @@
 
 > Split from [webman-tech/laravel-monorepo](https://github.com/webman-tech/laravel-monorepo)
 
-适用于 webman 的 Laravel 翻译组件，基于 illuminate/translation 实现。
+适用于 webman 与非 webman 环境的 Laravel 翻译组件，基于 illuminate/translation 实现。
 
 ## 安装
 
@@ -11,8 +11,6 @@ composer require webman-tech/laravel-translation
 ```
 
 ## 简介
-
-该组件将 Laravel 强大的翻译和本地化功能引入 webman 框架中，提供了多语言支持和参数替换等功能。
 
 所有方法和配置与 Laravel
 几乎一致，因此使用方式可完全参考 [Laravel Localization 文档](https://laravel.com/docs/localization)。

@@ -49,7 +49,7 @@ use Illuminate\Process\Factory;
  */
 class Process
 {
-    public static function instance()
+    public static function instance(): Factory
     {
         return new Factory();
     }

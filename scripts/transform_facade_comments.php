@@ -6,6 +6,28 @@ $configs = [
     \WebmanTech\LaravelDatabase\Facades\DB::class => [
         'from' => \Illuminate\Support\Facades\DB::class,
     ],
+    \WebmanTech\LaravelRedis\Facades\Redis::class => [
+        'from' => \Illuminate\Support\Facades\Redis::class,
+        'change' => [
+            'remove_fns' => [
+                'connection', // 已经在类中提供了
+                // RedisManager 独有方法：本 Facade __callStatic 转发至 connection()，转发后不可用
+                'resolve',
+                'connections',
+                'enableEvents',
+                'disableEvents',
+                'setDriver',
+                'purge',
+                'extend',
+            ],
+        ],
+        'add' => [
+            ' *',
+            ' * @see \Illuminate\Redis\RedisManager',
+            ' * @see \Illuminate\Redis\Connections\Connection',
+            ' * @see \Illuminate\Contracts\Redis\Factory',
+        ],
+    ],
     \WebmanTech\LaravelConsole\Facades\Artisan::class => [
         'from' => \Illuminate\Support\Facades\Artisan::class,
         'change' => [
@@ -35,6 +57,8 @@ $configs = [
         'change' => [
             'remove_fns' => [
                 'instance', // 已经在类中提供了
+                'capture', // 已经在类中提供了
+                'createFromGlobals', // 已经在类中提供了
                 // route 不支持
                 'route',
                 // session 不支持
@@ -51,7 +75,6 @@ $configs = [
         'add' => [
             ' *',
             ' * @see \Illuminate\Http\Request',
-            ' * @method static \Illuminate\Http\Request createFromWebman(\Webman\Http\Request|null $request = null)',
         ],
     ],
     \WebmanTech\LaravelCache\Facades\Cache::class => [
@@ -122,8 +145,8 @@ foreach ($configs as $targetClass => $config) {
     ];
     foreach ($methods as $info) {
         if (isset($config['change']['return'])) {
-            $value = $info['return'];
-            $info['return'] = $config['change']['return'][$value] ?? $value;
+            // strtr 支持返回类型中的单个类名替换（如联合类型 RedisClient|array）
+            $info['return'] = strtr($info['return'], $config['change']['return']);
         }
         if (isset($config['change']['remove_fns']) && in_array($info['function'], $config['change']['remove_fns'], true)) {
             continue;

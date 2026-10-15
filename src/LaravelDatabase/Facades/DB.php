@@ -2,7 +2,10 @@
 
 namespace WebmanTech\LaravelDatabase\Facades;
 
-use Webman\Database\DatabaseManager;
+use Illuminate\Database\ConnectionResolverInterface;
+use Illuminate\Database\DatabaseManager;
+use WebmanTech\CommonUtils\Container;
+use WebmanTech\LaravelDatabase\Mock\DefaultDatabaseManager;
 
 /**
  * @method static \Illuminate\Database\Connection connection(\UnitEnum|string|null $name = null)
@@ -72,6 +75,7 @@ use Webman\Database\DatabaseManager;
  * @method static \PDO|\Closure|null getRawReadPdo()
  * @method static \Illuminate\Database\Connection setPdo(\PDO|\Closure|null $pdo)
  * @method static \Illuminate\Database\Connection setReadPdo(\PDO|\Closure|null $pdo)
+ * @method static \Illuminate\Database\Connection setReadPdoConfig(array $config)
  * @method static string|null getName()
  * @method static string|null getNameWithReadWriteType()
  * @method static mixed getConfig(string|null $option = null)
@@ -83,7 +87,7 @@ use Webman\Database\DatabaseManager;
  * @method static \Illuminate\Database\Connection setSchemaGrammar(\Illuminate\Database\Schema\Grammars\Grammar $grammar)
  * @method static \Illuminate\Database\Query\Processors\Processor getPostProcessor()
  * @method static \Illuminate\Database\Connection setPostProcessor(\Illuminate\Database\Query\Processors\Processor $processor)
- * @method static \Illuminate\Contracts\Events\Dispatcher getEventDispatcher()
+ * @method static \Illuminate\Contracts\Events\Dispatcher|null getEventDispatcher()
  * @method static \Illuminate\Database\Connection setEventDispatcher(\Illuminate\Contracts\Events\Dispatcher $events)
  * @method static void unsetEventDispatcher()
  * @method static \Illuminate\Database\Connection setTransactionManager(\Illuminate\Database\DatabaseTransactionsManager $manager)
@@ -112,13 +116,72 @@ use Webman\Database\DatabaseManager;
  * @method static void afterCommit(callable $callback)
  * @method static void afterRollBack(callable $callback)
  */
-class DB extends \support\Db
+class DB
 {
+    private static $instance;
+
     /**
-     * @return object|DatabaseManager
+     * @return DatabaseManager
      */
-    public static function getInstance()
+    public static function instance(): ConnectionResolverInterface
     {
-        return static::$instance;
+        if (self::$instance !== null) {
+            return self::$instance;
+        }
+        $container = Container::getCurrent();
+        if ($container->has(ConnectionResolverInterface::class)) {
+            /** @phpstan-ignore-next-line */
+            return self::$instance = $container->get(ConnectionResolverInterface::class);
+        }
+        return self::$instance = self::resolveDefault();
+    }
+
+    /**
+     * 组件内默认解析（不含容器与静态缓存）：webman 全局实例 → 纯 illuminate 默认（config('database') 驱动）
+     *
+     * @return DatabaseManager
+     */
+    public static function resolveDefault(): ConnectionResolverInterface
+    {
+        $webmanManager = self::resolveWebmanManager();
+        if ($webmanManager !== null) {
+            return $webmanManager;
+        }
+        return DefaultDatabaseManager::create();
+    }
+
+    /**
+     * 兼容历史版本 API（曾读取 webman 全局 Manager 实例），现等价于 instance()
+     *
+     * @return DatabaseManager
+     */
+    public static function getInstance(): ConnectionResolverInterface
+    {
+        return static::instance();
+    }
+
+    /**
+     * webman 环境下从 support\Db 的全局实例取 DatabaseManager，未初始化时返回 null
+     */
+    private static function resolveWebmanManager(): ?DatabaseManager
+    {
+        if (!class_exists('support\Db')) {
+            return null;
+        }
+        try {
+            /** @var \support\Db|null $instance */
+            $instance = (new \ReflectionProperty('support\Db', 'instance'))->getValue();
+            return $instance?->getDatabaseManager();
+        } catch (\ReflectionException) {
+            return null;
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function __callStatic($name, array $arguments)
+    {
+        return static::instance()->{$name}(...$arguments);
     }
 }

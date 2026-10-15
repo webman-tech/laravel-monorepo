@@ -6,6 +6,8 @@ composer.lock
 .phpunit.cache
 phpstan.neon
 .claude
+.agents
+.workbuddy
 /TODO
 
 # for tests，由于 webman 1.6.9 之后 BASE_PATH 不好调整，因此只能被放到项目级别
@@ -19,3 +21,4 @@ phpstan.neon
 
 # e2e 生成物（install 基于最新骨架重建，可抛弃）
 /e2e/webman
+/e2e/plain

@@ -1,0 +1,21 @@
+{
+    "name": "webman-tech/e2e-plain-host",
+    "description": "E2E host skeleton: minimal non-webman framework (illuminate based)",
+    "type": "project",
+    "license": "MIT",
+    "require": {
+        "php": "^8.2",
+        "webman-tech/common-utils": "^5.0 || dev-main"
+    },
+    "autoload": {
+        "files": [
+            "helpers.php"
+        ]
+    },
+    "scripts": {
+        "post-update-cmd": "if [ -d vendor/webman ]; then rm -rf vendor/webman vendor/workerman vendor/webman-tech/testing && composer dump-autoload; fi"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

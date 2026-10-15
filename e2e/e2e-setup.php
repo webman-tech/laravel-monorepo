@@ -43,4 +43,16 @@ return SetupConfig::configure()
             'webman-tech/laravel-translation',
             'webman-tech/laravel-validation',
         ])
+    )
+    // 非 webman 宿主（纯 illuminate）：本地骨架即宿主框架，验证组件在无 webman 环境下的完整可用性
+    ->app('plain', AppConfig::configure()
+        ->skeleton('plain-skeleton')
+        ->targetDir('plain')
+        ->srcDir('plain-src')
+        ->package('webman-tech/laravel-monorepo')
+        ->requireDev([
+            'pestphp/pest' => '^3.7',
+            'monolog/monolog' => '^3.8',
+            'webman-tech/laravel-monorepo' => 'dev-main',
+        ])
     );

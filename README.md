@@ -1,6 +1,14 @@
 # webman-tech/laravel-monorepo
 
-适用于 webman 的 laravel 组件的 monorepo 仓库，大版本随 laravel 的主版本号一致
+laravel 组件的 monorepo 仓库，大版本随 laravel 的主版本号一致
+
+## 框架支持
+
+所有组件均可运行在 webman（第一支持优先级） 与非 webman（自研框架 / 标准 PHP 应用）环境下。
+
+通用接入模式：宿主启动时通过 `webman-tech/common-utils` 的 `RuntimeCustomRegister` 注册运行时能力
+（容器、配置、日志、请求、定时器等），再将 db / redis 等 Manager 绑进容器即可。
+完整示例见 `e2e/plain-src`（一个最小非 webman 宿主应用，随 e2e 测试自动安装运行，命令 `composer e2e:test`）。
 
 ## 安装
 
@@ -37,6 +45,7 @@ composer require webman-tech/laravel-monorepo
     - Unit: 单元测试
         - Facades: 基本对应每个组件的 facade 入口
     - webman: 用于单元测试的一个 webman 极小项目结构
+- e2e: 端到端测试
 
 ## remark
 

@@ -2,7 +2,7 @@
 
 > Split from [webman-tech/laravel-monorepo](https://github.com/webman-tech/laravel-monorepo)
 
-适用于 webman 的 Laravel HTTP 组件，基于 illuminate/http 实现。
+适用于 webman 与非 webman 环境的 Laravel HTTP 组件，基于 illuminate/http 实现。
 
 ## 安装
 
@@ -11,8 +11,6 @@ composer require webman-tech/laravel-http
 ```
 
 ## 简介
-
-该组件将 Laravel 强大的 HTTP 功能引入 webman 框架中，包括 HTTP 客户端、Request 对象和上传文件处理。
 
 所有方法和配置与 Laravel
 几乎一致，因此使用方式可完全参考 [Laravel HTTP Client 文档](https://laravel.com/docs/http-client)
