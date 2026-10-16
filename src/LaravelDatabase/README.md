@@ -43,13 +43,11 @@ includes:
 
 ## 非 webman 环境接入
 
-本组件不强制依赖 webman。`Facades\DB` 的解析顺序：
+本组件不强制依赖 webman。`Facades\DB` 继承 `support\Db`（非 webman 宿主下经 class_alias 顶替为 illuminate Capsule，两类宿主血系一致）：
 
-1. 容器中已绑定 `Illuminate\Database\ConnectionResolverInterface`，直接使用（需要完全控制时推荐）
-2. 否则回退 webman 的 `support\Db`（需安装 `webman/database`）
-3. 否则使用纯 illuminate 默认实现：从 `config('database')` 创建 `DatabaseManager`（连接配置缺失时在使用时报错）
+- **Facade（`DB::table()` 等静态调用与 `getInstance()`）**：走 Capsule 全局真相源——webman 下由 `webman/database` 初始装配；非 webman 下首次访问时自动以 Capsule 从 `config('database')` 装配（与 webman/database 的初始方式一致，含 query/事务事件派发与 Eloquent Model resolver；连接配置缺失时在使用时报错）。需要完全控制时，宿主可自行装配 Capsule 并 `setAsGlobal()` 接管真相源。
+- **组件内部消费**（如验证器的 unique 规则、缓存 database store）：经 ExtComponentGetter 优先探测容器绑定的 `Illuminate\Database\ConnectionResolverInterface`（推荐的自定义入口）。
 
-非 webman 宿主仅需提供 `config('database')` 即可使用；需要完全控制（自定义连接池、事件监听等）时在启动时将自己的
-DatabaseManager 绑进容器（完整示例见仓库根 README 与 `e2e/plain-src`）。
+注意 Capsule 全局真相源为一次性装配（与 webman/Laravel 官方模型一致）。
 
 webman 环境下无需任何改动，Facade 自动走 `support\Db`（协程连接池行为不变）。

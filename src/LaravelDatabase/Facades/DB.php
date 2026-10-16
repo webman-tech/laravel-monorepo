@@ -2,10 +2,13 @@
 
 namespace WebmanTech\LaravelDatabase\Facades;
 
-use Illuminate\Database\ConnectionResolverInterface;
-use Illuminate\Database\DatabaseManager;
-use WebmanTech\CommonUtils\Container;
+use Illuminate\Database\Capsule\Manager as CapsuleManager;
 use WebmanTech\LaravelDatabase\Mock\DefaultDatabaseManager;
+
+// webman/database 未安装时，将 support\Db 顶替为 illuminate Capsule，Facade 的继承关系在两类宿主下均成立
+if (!class_exists(\support\Db::class)) {
+    class_alias(CapsuleManager::class, \support\Db::class);
+}
 
 /**
  * @method static \Illuminate\Database\Connection connection(\UnitEnum|string|null $name = null)
@@ -116,72 +119,18 @@ use WebmanTech\LaravelDatabase\Mock\DefaultDatabaseManager;
  * @method static void afterCommit(callable $callback)
  * @method static void afterRollBack(callable $callback)
  */
-class DB
+class DB extends \support\Db
 {
-    private static $instance;
-
     /**
-     * @return DatabaseManager
-     */
-    public static function instance(): ConnectionResolverInterface
-    {
-        if (self::$instance !== null) {
-            return self::$instance;
-        }
-        $container = Container::getCurrent();
-        if ($container->has(ConnectionResolverInterface::class)) {
-            /** @phpstan-ignore-next-line */
-            return self::$instance = $container->get(ConnectionResolverInterface::class);
-        }
-        return self::$instance = self::resolveDefault();
-    }
-
-    /**
-     * 组件内默认解析（不含容器与静态缓存）：webman 全局实例 → 纯 illuminate 默认（config('database') 驱动）
+     * Capsule 全局真相源（历史 API）：webman 下即初始装配实例；非 webman 下未初始化时自动装配
      *
-     * @return DatabaseManager
+     * @return CapsuleManager
      */
-    public static function resolveDefault(): ConnectionResolverInterface
+    public static function getInstance(): CapsuleManager
     {
-        $webmanManager = self::resolveWebmanManager();
-        if ($webmanManager !== null) {
-            return $webmanManager;
+        if (static::$instance === null) {
+            static::$instance = DefaultDatabaseManager::createCapsule();
         }
-        return DefaultDatabaseManager::create();
-    }
-
-    /**
-     * 兼容历史版本 API（曾读取 webman 全局 Manager 实例），现等价于 instance()
-     *
-     * @return DatabaseManager
-     */
-    public static function getInstance(): ConnectionResolverInterface
-    {
-        return static::instance();
-    }
-
-    /**
-     * webman 环境下从 support\Db 的全局实例取 DatabaseManager，未初始化时返回 null
-     */
-    private static function resolveWebmanManager(): ?DatabaseManager
-    {
-        if (!class_exists('support\Db')) {
-            return null;
-        }
-        try {
-            /** @var \support\Db|null $instance */
-            $instance = (new \ReflectionProperty('support\Db', 'instance'))->getValue();
-            return $instance?->getDatabaseManager();
-        } catch (\ReflectionException) {
-            return null;
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function __callStatic($name, array $arguments)
-    {
-        return static::instance()->{$name}(...$arguments);
+        return static::$instance;
     }
 }

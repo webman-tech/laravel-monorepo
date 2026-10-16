@@ -81,7 +81,7 @@ use WebmanTech\LaravelRedis\Mock\WebmanRedisFactory;
  * @method static mixed fcall_ro(string $fn, array $keys = [], array $args = [])
  * @method static \Redis|bool flushAll(bool|null $sync = null)
  * @method static \Redis|bool flushDB(bool|null $sync = null)
- * @method static \Redis|array|string|bool function (string $operation, mixed ...$args)
+ * @method static \Redis|array|string|bool function(string $operation, mixed ...$args)
  * @method static \Redis|int|false geoadd(string $key, float $lng, float $lat, string $member, mixed ...$other_triples_and_options)
  * @method static \Redis|float|false geodist(string $key, string $src, string $dst, string|null $unit = null)
  * @method static \Redis|array|false geohash(string $key, string $member, string ...$other_members)
