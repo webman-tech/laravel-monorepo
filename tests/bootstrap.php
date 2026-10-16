@@ -10,6 +10,11 @@ WebmanTech\CommonUtils\RuntimeCustomRegister::register(
     WebmanTech\CommonUtils\Timer\PcntlTimer::call(...),
 );
 
+WebmanTech\CommonUtils\RuntimeCustomRegister::register(
+    WebmanTech\CommonUtils\RuntimeCustomRegister::KEY_VENDOR_PATH,
+    fn(): string => dirname(__DIR__) . '/vendor',
+);
+
 function get_env(string $key, $default = null)
 {
     return \WebmanTech\CommonUtils\get_env($key, $default);

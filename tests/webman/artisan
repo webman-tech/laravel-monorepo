@@ -5,12 +5,17 @@ use Webman\Config;
 use WebmanTech\CommonUtils\Container;
 use WebmanTech\LaravelConsole\Kernel;
 
-require __DIR__ . '/vendor/autoload.php';
+// 与 $root/pest 同理：BASE_PATH 指向本夹具应用，需在 autoload 前定义
+if (!defined('BASE_PATH')) {
+    define('BASE_PATH', __DIR__);
+}
+
+require __DIR__ . '/../../vendor/autoload.php';
 
 // same as webman/console
 if (!in_array($argv[1] ?? '', ['start', 'restart', 'stop', 'status', 'reload', 'connections'])) {
     //require_once __DIR__ . '/support/bootstrap.php';
-    require_once __DIR__ . '/tests/bootstrap.php'; // 测试环境下使用
+    require_once __DIR__ . '/../bootstrap.php'; // 测试环境下使用
 } else {
     if (class_exists('Support\App')) {
         Support\App::loadAllConfig(['route']);

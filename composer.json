@@ -84,9 +84,7 @@
   "autoload-dev": {
     "psr-4": {
       "": "tests/webman",
-      "Tests\\": "tests",
-      "app\\": "app",
-      "plugin\\": "plugin"
+      "Tests\\": "tests"
     }
   },
   "config": {
@@ -97,6 +95,7 @@
     "sort-packages": true
   },
   "scripts": {
+    "post-autoload-dump": "@php scripts/patch_test_bins.php",
     "analyse": "phpstan analyse --memory-limit=1G",
     "analyse-raw": "phpstan analyse --error-format=raw --memory-limit=1G",
     "e2e:install": "e2e-setup install",
