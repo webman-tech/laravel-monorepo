@@ -2,7 +2,7 @@
 
 > Split from [webman-tech/laravel-monorepo](https://github.com/webman-tech/laravel-monorepo)
 
-适用于 webman 的 Laravel 数据库组件，基于 illuminate/database 实现。
+适用于 webman 与非 webman 环境的 Laravel 数据库组件，基于 illuminate/database 实现。
 
 ## 安装
 
@@ -11,8 +11,6 @@ composer require webman-tech/laravel-database
 ```
 
 ## 简介
-
-该组件将 Laravel 强大的数据库功能引入 webman 框架中，提供了完整的数据库查询构建器和 Eloquent ORM。
 
 所有方法和配置与 Laravel 几乎一致，因此使用方式可完全参考 [Laravel Database 文档](https://laravel.com/docs/database)。
 
@@ -42,3 +40,14 @@ includes:
 ```bash
 ./vendor/bin/phpstan analyse
 ```
+
+## 非 webman 环境接入
+
+本组件不强制依赖 webman。`Facades\DB` 继承 `support\Db`（非 webman 宿主下经 class_alias 顶替为 illuminate Capsule，两类宿主血系一致）：
+
+- **Facade（`DB::table()` 等静态调用与 `getInstance()`）**：走 Capsule 全局真相源——webman 下由 `webman/database` 初始装配；非 webman 下首次访问时自动以 Capsule 从 `config('database')` 装配（与 webman/database 的初始方式一致，含 query/事务事件派发与 Eloquent Model resolver；连接配置缺失时在使用时报错）。需要完全控制时，宿主可自行装配 Capsule 并 `setAsGlobal()` 接管真相源。
+- **组件内部消费**（如验证器的 unique 规则、缓存 database store）：经 ExtComponentGetter 优先探测容器绑定的 `Illuminate\Database\ConnectionResolverInterface`（推荐的自定义入口）。
+
+注意 Capsule 全局真相源为一次性装配（与 webman/Laravel 官方模型一致）。
+
+webman 环境下无需任何改动，Facade 自动走 `support\Db`（协程连接池行为不变）。

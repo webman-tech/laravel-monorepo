@@ -37,9 +37,7 @@
     "illuminate/translation": "^13.0",
     "illuminate/validation": "^13.0",
     "league/flysystem": "^3.0",
-    "webman-tech/common-utils": "^5.0 || dev-main",
-    "webman/database": "^2.1",
-    "webman/redis": "^2.1"
+    "webman-tech/common-utils": "^5.0 || dev-main"
   },
   "require-dev": {
     "alphasnow/aliyun-oss-laravel": "^4.9",
@@ -57,6 +55,8 @@
     "symfony/var-exporter": "^7.0",
     "webman-tech/testing": "^1.1",
     "webman/console": "^2.1",
+    "webman/database": "^2.1",
+    "webman/redis": "^2.1",
     "workerman/webman-framework": "^2.1"
   },
   "replace": {
@@ -84,9 +84,7 @@
   "autoload-dev": {
     "psr-4": {
       "": "tests/webman",
-      "Tests\\": "tests",
-      "app\\": "app",
-      "plugin\\": "plugin"
+      "Tests\\": "tests"
     }
   },
   "config": {
@@ -97,11 +95,12 @@
     "sort-packages": true
   },
   "scripts": {
-    "analyse": "phpstan analyse",
-    "analyse-raw": "phpstan analyse --error-format=raw",
-    "e2e:install": "e2e-setup install webman",
-    "e2e:sync": "e2e-setup sync webman",
-    "e2e:test": "cd e2e/webman && vendor/bin/pest",
+    "post-autoload-dump": "@php scripts/patch_test_bins.php",
+    "analyse": "phpstan analyse --memory-limit=1G",
+    "analyse-raw": "phpstan analyse --error-format=raw --memory-limit=1G",
+    "e2e:install": "e2e-setup install",
+    "e2e:sync": "e2e-setup sync",
+    "e2e:test": "cd e2e/webman && vendor/bin/pest && cd ../plain && vendor/bin/pest",
     "script:clean-temp-files": "php scripts/clean_temp_files.php",
     "script:replace-validation-files": "php scripts/replace_validation_files.php",
     "script:transform-facade-comments": "php scripts/transform_facade_comments.php",

@@ -2,7 +2,13 @@
 
 namespace WebmanTech\LaravelDatabase\Facades;
 
-use Webman\Database\DatabaseManager;
+use Illuminate\Database\Capsule\Manager as CapsuleManager;
+use WebmanTech\LaravelDatabase\Mock\DefaultDatabaseManager;
+
+// webman/database 未安装时，将 support\Db 顶替为 illuminate Capsule，Facade 的继承关系在两类宿主下均成立
+if (!class_exists(\support\Db::class)) {
+    class_alias(CapsuleManager::class, \support\Db::class);
+}
 
 /**
  * @method static \Illuminate\Database\Connection connection(\UnitEnum|string|null $name = null)
@@ -72,6 +78,7 @@ use Webman\Database\DatabaseManager;
  * @method static \PDO|\Closure|null getRawReadPdo()
  * @method static \Illuminate\Database\Connection setPdo(\PDO|\Closure|null $pdo)
  * @method static \Illuminate\Database\Connection setReadPdo(\PDO|\Closure|null $pdo)
+ * @method static \Illuminate\Database\Connection setReadPdoConfig(array $config)
  * @method static string|null getName()
  * @method static string|null getNameWithReadWriteType()
  * @method static mixed getConfig(string|null $option = null)
@@ -83,7 +90,7 @@ use Webman\Database\DatabaseManager;
  * @method static \Illuminate\Database\Connection setSchemaGrammar(\Illuminate\Database\Schema\Grammars\Grammar $grammar)
  * @method static \Illuminate\Database\Query\Processors\Processor getPostProcessor()
  * @method static \Illuminate\Database\Connection setPostProcessor(\Illuminate\Database\Query\Processors\Processor $processor)
- * @method static \Illuminate\Contracts\Events\Dispatcher getEventDispatcher()
+ * @method static \Illuminate\Contracts\Events\Dispatcher|null getEventDispatcher()
  * @method static \Illuminate\Database\Connection setEventDispatcher(\Illuminate\Contracts\Events\Dispatcher $events)
  * @method static void unsetEventDispatcher()
  * @method static \Illuminate\Database\Connection setTransactionManager(\Illuminate\Database\DatabaseTransactionsManager $manager)
@@ -115,10 +122,15 @@ use Webman\Database\DatabaseManager;
 class DB extends \support\Db
 {
     /**
-     * @return object|DatabaseManager
+     * Capsule 全局真相源（历史 API）：webman 下即初始装配实例；非 webman 下未初始化时自动装配
+     *
+     * @return CapsuleManager
      */
-    public static function getInstance()
+    public static function getInstance(): CapsuleManager
     {
+        if (static::$instance === null) {
+            static::$instance = DefaultDatabaseManager::createCapsule();
+        }
         return static::$instance;
     }
 }

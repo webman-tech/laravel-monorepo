@@ -9,13 +9,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/utils.php';
 
 $paths = [
-    'app',
-    'config',
-    'plugin',
-    'resource',
-    'runtime',
-    'storage',
-    'artisan',
+    'tests/webman/runtime',
+    'tests/webman/storage',
 ];
 
 $filesystem = new Filesystem();

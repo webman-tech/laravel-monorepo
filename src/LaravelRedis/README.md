@@ -2,7 +2,7 @@
 
 > Split from [webman-tech/laravel-monorepo](https://github.com/webman-tech/laravel-monorepo)
 
-适用于 webman 的 Laravel Redis 组件，基于 illuminate/redis 实现。
+适用于 webman 与非 webman 环境的 Laravel Redis 组件，基于 illuminate/redis 实现。
 
 ## 安装
 
@@ -11,8 +11,6 @@ composer require webman-tech/laravel-redis
 ```
 
 ## 简介
-
-该组件是对 [webman/redis](https://www.workerman.net/doc/webman/db/redis.html) 的包装，提供更完整的 Laravel Redis 使用体验。
 
 所有方法和配置与 Laravel 几乎一致，因此使用方式可完全参考 [Laravel Redis 文档](https://laravel.com/docs/redis)。
 

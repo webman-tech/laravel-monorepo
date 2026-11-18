@@ -21,7 +21,7 @@ use function WebmanTech\CommonUtils\locale;
 class Translator
 {
     /**
-     * @var null|TranslatorContract
+     * @var null|LaravelTranslator
      */
     protected static ?TranslatorContract $_instance = null;
     /**
@@ -29,6 +29,9 @@ class Translator
      */
     protected static bool $_shouldChangeLocale = false;
 
+    /**
+     * @return LaravelTranslator
+     */
     public static function instance(): TranslatorContract
     {
         if (!static::$_instance) {
@@ -42,8 +45,9 @@ class Translator
     }
 
     /**
-     * https://github.com/laravel/framework/blob/11.x/src/Illuminate/Translation/TranslationServiceProvider.phphttps://github.com/laravel/framework/blob/11.x/src/Illuminate/Translation/TranslationServiceProvider.php
-     * @return TranslatorContract
+     * https://github.com/laravel/framework/blob/11.x/src/Illuminate/Translation/TranslationServiceProvider.php
+     *
+     * @return LaravelTranslator
      */
     protected static function createTranslator(): TranslatorContract
     {

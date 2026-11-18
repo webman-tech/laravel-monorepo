@@ -5,9 +5,12 @@
   "description": "Webman plugin webman-tech/laravel-redis",
   "require": {
     "php": "^8.3",
-    "illuminate/redis": "^13.0",
     "illuminate/events": "^13.0",
-    "webman/redis": "^2.1"
+    "illuminate/redis": "^13.0",
+    "webman-tech/common-utils": "^5.0 || dev-main"
+  },
+  "suggest": {
+    "webman/redis": "webman 环境下启用协程 Redis 连接池（facade 默认回退路径）"
   },
   "autoload": {
     "psr-4": {

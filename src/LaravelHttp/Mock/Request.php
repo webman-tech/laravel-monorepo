@@ -4,11 +4,11 @@ namespace WebmanTech\LaravelHttp\Mock;
 
 use Illuminate\Http\Request as BaseRequest;
 use Illuminate\Http\UploadedFile;
+use WebmanTech\LaravelHttp\Facades\LaravelRequest;
 use WebmanTech\LaravelHttp\Facades\LaravelUploadedFile;
 
 /**
  * @internal
- * @method static static createFromWebman(\Webman\Http\Request|null $request = null, bool $isForceCreate = false)
  */
 final class Request extends BaseRequest
 {
@@ -19,7 +19,9 @@ final class Request extends BaseRequest
     {
         static::enableHttpMethodParameterOverride();
 
-        return static::createFromWebman(null, true);
+        /** @var static $request */
+        $request = LaravelRequest::getCalledFacadeClass()::createFromGlobal();
+        return $request;
     }
 
     /**
@@ -27,7 +29,9 @@ final class Request extends BaseRequest
      */
     public static function createFromGlobals(): static
     {
-        return static::createFromWebman(null, true);
+        /** @var static $request */
+        $request = LaravelRequest::getCalledFacadeClass()::createFromGlobal();
+        return $request;
     }
 
     /**
