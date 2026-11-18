@@ -73,7 +73,7 @@ LaravelTranslation, LaravelValidation
 - 测试矩阵：PHP 8.3 / 8.4 / 8.5（Laravel 13 要求 >= 8.3）
 - HTTP 测试依赖 go-httpbin 服务（CI 中 8080 端口）
 - push 到 `*.x` 分支或发 tag 触发 git-split，拆分到 9 个独立仓库；`split.yml` 的 `ref` 需与各分支版本保持一致（13.x 分支应为 `13.x`）
-- **注意**：`tests.yml` 的 `scheduled` 定时触发（每日 UTC 0:00）只在仓库默认分支执行；默认分支当前是 `12.x`，因此 13.x 的 CI 改动不影响定时任务，且定时任务测的是默认分支代码
+- 定时任务由独立的 `scheduled-tests.yml` 承担（每日 UTC 0:00）：由于 `schedule` 事件只在默认分支（当前 `12.x`）触发，该文件用矩阵显式 checkout `12.x` 与 `13.x`，覆盖两个版本分支。`12.x` 跑 PHP 8.2/8.3/8.4/8.5，`13.x` 跑 8.3/8.4/8.5（Laravel 13 要求 >= 8.3）。`tests.yml` 只保留 push / PR 触发，两分支同版本需同步维护 `scheduled-tests.yml`
 
 ## 注意事项
 
