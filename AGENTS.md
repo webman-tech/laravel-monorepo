@@ -80,5 +80,5 @@ LaravelTranslation, LaravelValidation
 - 修改包依赖后需运行 `php scripts/generate_composer.php` 同步根 composer.json
 - 新增/删除包后需运行 `generate_gitsplit.php` 和 `generate_readme.php`
 - 修改 Facade 的 `@method` 注解需改生成脚本再运行 `transform_facade_comments.php`，勿手改注解
-- PHPStan 排除了 `LaravelDatabase/Larastan/*` 和各包的 `ArrayHelper.php`；level 6 的历史类型缺失集中在 `phpstan-baseline.neon`，新增代码不应再新增缺失类型
+- PHPStan 为 level 6 + `phpVersion: 80300`（PHP 8.3），排除了 `LaravelDatabase/Larastan/*` 和各包的 `ArrayHelper.php`。类型缺失按三类处理：`src/*/Facades/*` 是生成代码（`@method` 注解由 `transform_facade_comments.php` 产出）整目录忽略；大面积的 `missingType.iterableValue`（array 缺 value 类型）按 identifier 忽略；其余少量缺失已补类型。新增的非生成代码应补全类型，不扩大忽略范围
 - 不要手动编辑 CHANGELOG（由发布流程管理）

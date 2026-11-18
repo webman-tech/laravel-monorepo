@@ -11,7 +11,7 @@ class PsrMessageFormatter implements MessageFormatterInterface
 {
     use MessageFormatterTrait;
 
-    private $config = [
+    private array $config = [
         'request_body_limit_size' => 300, // request body 记录最大长度
         'response_body_limit_size' => 300, // response body 记录最大长度
         'request_body_skip_file' => true, // 提交文件时，跳过 body 记录
@@ -19,6 +19,9 @@ class PsrMessageFormatter implements MessageFormatterInterface
         'replacer' => [], // 替换日志中的内容，使用 preg_replace 匹配
     ];
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function __construct(array $config = [])
     {
         $this->config = array_merge($this->config, $config);

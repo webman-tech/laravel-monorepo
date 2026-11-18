@@ -1,7 +1,4 @@
 # @see https://phpstan.org/config-reference
-includes:
-	- phpstan-baseline.neon
-
 parameters:
 	level: 6
 	phpVersion: 80300
@@ -12,9 +9,19 @@ parameters:
 		- src/*/Helper/ArrayHelper.php # 不是自己写的
 	tmpDir: runtime/phpstan-dist
 	ignoreErrors:
-		# Facade 的 @method 注解由脚本从 illuminate 方法签名生成，其 array/iterable value 类型依赖上游，不在此处维护
-		- '#PHPDoc tag @method for method (.*) parameter \#(.*) contains unknown class (.*)\.#'
-		- '#PHPDoc tag @method for method .* (parameter|return type) .* no value type specified in iterable type#'
-		- '#PHPDoc tag @method for method (.*) return type contains unknown class (.*)\.#'
-		- '#Method WebmanTech\\LaravelConsole\\Mock\\LaravelApp::(\w+)\(\) with return type void returns mixed but should not return anything.#'
+		# Facade 的 @method 注解由 transform_facade_comments.php 从 illuminate 签名生成，生成代码整目录按类型忽略
+		-
+			path: src/*/Facades/*
+			identifiers:
+				- missingType.iterableValue
+				- missingType.parameter
+				- missingType.return
+				- missingType.generics
+				- missingType.property
+		# 大面积的 array/iterable value 类型缺失（非逻辑错误），统一忽略
+		- identifier: missingType.iterableValue
+		# LaravelApp 的 void 代理方法转发 __call 返回 mixed
+		-
+			message: '#^Method WebmanTech\\LaravelConsole\\Mock\\LaravelApp::\w+\(\) with return type void returns mixed but should not return anything\.$#'
+			path: src/LaravelConsole/Mock/LaravelApp.php
 	reportUnmatchedIgnoredErrors: false
