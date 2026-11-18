@@ -1,6 +1,8 @@
 # webman-tech/laravel-monorepo
 
-laravel 组件的 monorepo 仓库，大版本随 laravel 的主版本号一致
+laravel 组件的 monorepo 仓库，大版本随 laravel 的主版本号一致（当前 13.x，要求 PHP >= 8.3）。
+
+开发约定与常用命令见 [AGENTS.md](./AGENTS.md)。
 
 ## 框架支持
 
@@ -49,10 +51,10 @@ composer require webman-tech/laravel-monorepo
 
 ## remark
 
-- 11.x 12.x 是啥
+- 11.x 12.x 13.x 是啥
 
 与 laravel 的主版本保持一致
 
-- 开发时如何从 11.x 升级为 12.x
+- 开发时如何从 12.x 升级为 13.x
 
-使用脚本：`php scripts/upgrade_laravel_version.php 11 12`
+使用脚本：`php scripts/upgrade_laravel_version.php 12 13`
