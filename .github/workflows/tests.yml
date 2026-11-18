@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [8.2, 8.3, 8.4, 8.5]
+        php: [8.3, 8.4, 8.5]
         stability: [
           #prefer-lowest, 问题较多
           prefer-stable
@@ -60,10 +60,10 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
-    name: E2E (webman) - PHP ${{ matrix.php }}
+    name: E2E (webman + plain) - PHP ${{ matrix.php }}
     strategy:
       matrix:
-        php: [8.2, 8.3, 8.4, 8.5]
+        php: [8.3, 8.4, 8.5]
 
     steps:
       - name: Checkout
