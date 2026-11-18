@@ -1,6 +1,6 @@
 name: scheduled-tests
 
-# schedule 事件只在仓库默认分支(12.x)触发，且读取的是默认分支上的本文件。
+# schedule 事件只在仓库默认分支触发，且读取的是默认分支上的本文件。
 # 因此用 matrix.branch 显式 checkout 12.x / 13.x，让定时任务覆盖两个版本分支。
 on:
   schedule:
