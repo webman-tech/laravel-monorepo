@@ -1,5 +1,15 @@
 <?php
 
+// Laravel 13 的 MemcachedLock 引用 \Memcached 常量；无扩展环境提供最小 stub 以便用匿名 mock 测试。
+if (!class_exists(\Memcached::class)) {
+    class Memcached
+    {
+        public const RES_SUCCESS = 0;
+
+        public const GET_EXTENDED = 2;
+    }
+}
+
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Cache\RedisLock;
 use Illuminate\Contracts\Cache\Lock;
@@ -546,6 +556,7 @@ describe('WatchdogMemcachedLock renew', function () {
             public function get(string $key): mixed { return false; }
             public function add(string $key, mixed $value, int $seconds): bool { return true; }
             public function touch(string $key, int $seconds): bool { return true; }
+            public function getResultCode(): int { return \Memcached::RES_SUCCESS; }
         };
 
         $lock = (new ReflectionClass(WatchdogMemcachedLock::class))
@@ -566,6 +577,7 @@ describe('WatchdogMemcachedLock renew', function () {
             public function get(string $key): mixed { return 'test-owner'; }
             public function add(string $key, mixed $value, int $seconds): bool { return true; }
             public function touch(string $key, int $seconds): bool { return true; }
+            public function getResultCode(): int { return \Memcached::RES_SUCCESS; }
         };
 
         $lock = (new ReflectionClass(WatchdogMemcachedLock::class))
@@ -586,6 +598,7 @@ describe('WatchdogMemcachedLock renew', function () {
             public function get(string $key): mixed { return 'test-owner'; }
             public function add(string $key, mixed $value, int $seconds): bool { return true; }
             public function touch(string $key, int $seconds): bool { return false; }
+            public function getResultCode(): int { return \Memcached::RES_SUCCESS; }
         };
 
         $lock = (new ReflectionClass(WatchdogMemcachedLock::class))

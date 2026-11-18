@@ -4,9 +4,9 @@
   "license": "MIT",
   "description": "Webman plugin webman-tech/laravel-redis",
   "require": {
-    "php": "^8.2",
-    "illuminate/redis": "^12.0",
-    "illuminate/events": "^12.0",
+    "php": "^8.3",
+    "illuminate/redis": "^13.0",
+    "illuminate/events": "^13.0",
     "webman/redis": "^2.1"
   },
   "autoload": {
